@@ -1,0 +1,52 @@
+/* Footer.css */
+.footer {
+    background-color: #f8f9fa; /* Light background color */
+    padding: 20px;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* Greener Me text Logo */
+.footer-logo {
+    max-width: 100px; /* Adjust logo size */
+    margin-bottom: 15px;
+}
+
+/* Main Logo */
+.footer__logo img {
+    height: 40px;
+    margin-right: 20px;
+  }
+
+
+/* Links */
+.footer-links {
+    margin-bottom: 15px;
+}
+
+.footer-links a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #007bff; /* Link color */
+}
+
+.footer-social {
+    display: flex;
+    justify-content: center;
+}
+
+.footer-social a {
+    margin: 0 10px;
+    color: #007bff; /* Icon color */
+    font-size: 24px; /* Adjust icon size */
+}
+
+.footer-social a:hover {
+    color: #0056b3; /* Hover color */
+}

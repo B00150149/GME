@@ -1,0 +1,114 @@
+ 
+ .header {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f9fa;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  
+  /* Main Logo image */
+  .header__logo img {
+    height: 40px;
+    margin-right: 20px;
+  }
+
+  /* GreenerMe text*/
+  .header__logo{
+    font-size: 24px; 
+    color: #4CAF50;
+    font-weight: 600; 
+  }
+  
+
+   
+  /* Searchbar  */
+  .header__search {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+  }
+  
+  .header__search input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* First Nav bar  */
+  .header__nav a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+  }
+  
+  .header__nav a:hover {
+    color: white;
+    background-color: #4CAF50;
+  }
+  
+
+  /* Secondary Main Nav */
+  .secondary-nav {
+    background-color: #2196F3; 
+    padding: 10px 0; 
+  }
+  
+  .secondary-nav__list {
+    display: flex;
+    justify-content: center; 
+    list-style: none; 
+    padding: 0; 
+    margin: 0; 
+  }
+  
+  .secondary-nav__list li {
+    margin: 0 15px;
+  }
+  
+  .secondary-nav__list a {
+    text-decoration: none; 
+    color: #fff; 
+    font-weight: 500; 
+  }
+  
+  .secondary-nav__list a:hover {
+    background-color: #4CAF50;
+  }
+  
+  /* Responsive Bar */
+@media (max-width: 768px) {
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .header__logo img {
+      height: 30px; 
+    }
+  
+    .header__nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 10px; 
+    }
+  
+    .header__nav a {
+      margin-left: 10px;
+      margin-right: 10px; 
+    }
+  
+    .secondary-nav__list {
+      flex-direction: column; 
+      align-items: center; 
+    }
+  
+    .secondary-nav__list li {
+      margin: 5px 0; 
+    }
+  }
+   
