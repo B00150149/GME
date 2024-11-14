@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react';;
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -7,6 +6,8 @@ import '../styles/Information.css'; // Import the CSS from styles folder
 import Link from 'next/link';
 import Image from 'next/image';
 import { articleimg1, articleimg2, articleimg3, learnimg, recycleimg, tipsimg } from '../images';
+
+import '../styles/Style.css';
 
 export default function Information (){
  
