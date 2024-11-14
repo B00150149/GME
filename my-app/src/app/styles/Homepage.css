@@ -1,0 +1,90 @@
+.homepage-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #e6f7ff; /* Light blue background */
+    padding: 20px;
+  }
+  
+  .homepage-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px; /* Max width for larger screens */
+    flex-wrap: wrap; /* Allow content to wrap on smaller screens */
+  }
+  
+  .homepage-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  /* Center content vertically */
+    align-items: center;      /* Center content horizontally */
+    text-align: center;       /* Ensure text is centered */
+    margin-right: 20px;
+  }
+  
+  .title {
+    font-size: 4rem; /* Big text size for 'Greener Me' */
+    font-weight: bold;
+    color: #3399ff; /* Light blue color */
+    margin-bottom: 20px;
+  }
+  
+  .image-container {
+    max-width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Center the image */
+  }
+  
+  .homepage-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    text-align: center;
+  }
+  
+  .button {
+    display: inline-block;
+    padding: 15px 30px;
+    margin-bottom: 15px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    background-color: #66CCFF; /* Light blue button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: #33b5e5; /* Darker blue on hover */
+  }
+  
+  @media (max-width: 768px) {
+    .homepage-content {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .homepage-left {
+      text-align: center;
+      margin-right: 0;
+      margin-bottom: 20px;
+    }
+  
+    .homepage-right {
+      align-items: center;
+    }
+  
+    .title {
+      font-size: 3rem; /* Smaller text size on mobile */
+    }
+  }
+  
