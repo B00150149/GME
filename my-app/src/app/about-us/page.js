@@ -16,6 +16,7 @@ export default function About() {
           
           <Header />
           <h1>About</h1>
+          <h2>Mission statement here*</h2>
           <Footer/>
          </>
     );
