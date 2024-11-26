@@ -1,5 +1,6 @@
 'use client'
-import React, { useState, useEffect } from 'react';;
+
+import React, { useEffect }  from 'react';;
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/Information.css'; // Import the CSS from styles folder
@@ -7,9 +8,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { articleimg1, articleimg2, articleimg3, learnimg, recycleimg, tipsimg } from '../images';
 
-import '../styles/Style.css';
 
 export default function Information (){
+
+  useEffect(() => {
+    // Only run this on the client side after hydration
+    if (typeof window !== 'undefined') {
+      require('bootstrap/dist/js/bootstrap.bundle.min.js');
+    }
+  }, []);
  
   return (
     <div className="Information">
@@ -18,34 +25,34 @@ export default function Information (){
       {/* Top Grid */}
 
       <div className="top">
-        {/* Bootstrap Carousel */}
-        <div id="articleCarousel" className="carousel slide" data-bs-ride="carousel">
+         {/* Bootstrap Carousel */}
+         <div id="carouselExampleAutoplaying" className="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
             <div className="carousel-inner">
-              {/* Carousel Item 1 */}
               <div className="carousel-item active">
-                <Link href="https://www.example.com/article1" target="_blank" rel="noopener noreferrer">
-                  <Image src={articleimg1} className="d-block w-100" alt="Article 1" />
+              <Link href="https://www.bbcearth.com/sustainability" target="_blank" rel="noopener noreferrer">
+                  <Image src={articleimg1} alt="Article 1" className="d-block w-100" />
                 </Link>
               </div>
-              {/* Carousel Item 2 */}
+
               <div className="carousel-item">
-                <Link href="https://www.example.com/article2" target="_blank" rel="noopener noreferrer">
-                  <Image src={articleimg2} className="d-block w-100" alt="Article 2" />
+              <Link href="https://www.downtoearth.org/articles/2019-10/14826/simple-sustainable-swaps" target="_blank" rel="noopener noreferrer">
+                  <Image src={articleimg2} alt="Article 2" className="d-block w-100" />
                 </Link>
               </div>
-              {/* Carousel Item 3 */}
+              
               <div className="carousel-item">
-                <Link href="https://www.example.com/article3" target="_blank" rel="noopener noreferrer">
-                  <Image src={articleimg3} className="d-block w-100" alt="Article 3" />
+              <Link href="https://www.buerklin.com/en/electronic-competence/news/study-sustainability-in-electronics/" target="_blank" rel="noopener noreferrer">
+                  <Image src={articleimg3} alt="Article 3" className="d-block w-100" />
                 </Link>
               </div>
             </div>
-            {/* Carousel Controls */}
-            <button className="carousel-control-prev" type="button" data-bs-target="#articleCarousel" data-bs-slide="prev">
+
+            <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
               <span className="carousel-control-prev-icon" aria-hidden="true"></span>
               <span className="visually-hidden">Previous</span>
             </button>
-            <button className="carousel-control-next" type="button" data-bs-target="#articleCarousel" data-bs-slide="next">
+
+            <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
               <span className="carousel-control-next-icon" aria-hidden="true"></span>
               <span className="visually-hidden">Next</span>
             </button>
