@@ -9,45 +9,36 @@ export default function About() {
 
     return (
         <>
-          
-          <Header />
-          <h1>About</h1>
-          <h2>Mission statement here*</h2>
-          <h1>Contact Us</h1>
-        
-          
 
+            <Header />
+            <h1>About</h1>
+            <h2>Mission statement here*</h2>
+            <h1>Contact Us</h1>
 
-<div class="container contact-form">
-            <div class="contact-image">
-                <img src="https://image.ibb.co/kUagtU/rocket_contact.png" alt="rocket_contact"/>
-            </div>
-            <form method="post">
-                <h3>Drop Us a Message</h3>
-               <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <input type="text" name="txtName" class="form-control" placeholder="Your Name *" value="" />
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="txtEmail" class="form-control" placeholder="Your Email *" value="" />
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="txtPhone" class="form-control" placeholder="Your Phone Number *" value="" />
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" name="btnSubmit" class="btnContact" value="Send Message" />
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <textarea name="txtMsg" class="form-control" placeholder="Your Message *" style="width: 100%; height: 150px;"></textarea>
-                        </div>
-                    </div>
+            <div class="container contact-form">
+                <div className="contact-image">
+                    <img src="https://image.ibb.co/kUagtU/rocket_contact.png" alt="rocket_contact" style="display: block; margin: 0 auto; width: 70%;" />
                 </div>
-            </form>
-</div>
+            </div>form id="contact-form" onSubmit={handleSubmit(onSubmit)} method="POST"</>
+            <div className="form-group">
+                <label htmlFor="name">Name</label>
+                <input type="text" className="form-control" />
+            </div>
+            <div className="form-group">
+                <label htmlFor="exampleInputEmail1">Email address</label>
+                <input type="email" className="form-control" aria-describedby="emailHelp" />
+            </div>
+            <div className="form-group">
+                <label htmlFor="message">Message</label>
+                <textarea className="form-control" rows="5"></textarea>
+            </div>
+            <button type="submit" className="btn btn-primary">Submit</button>
+            </div>
+
+
+
           <Footer/>
-         </>
-    );
+          </>
+    );}
+    
 }
