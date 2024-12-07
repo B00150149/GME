@@ -9,7 +9,60 @@ import Image from 'next/image';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function newlisting() {
-  const [rating, setRating] = useState(3); // Default rating
+  // const [rating, setRating] = useState(3); // Default rating
+
+
+  const handleSubmit = (event) => {
+    console.log("handling submit");
+    event.preventDefault();
+
+    const data = new FormData(event.currentTarget);
+    let itemName = data.get('itemName');
+    let description = data.get('description');
+    let category = data.get('category');
+    let swapDetails = data.get('swapDetails');
+    let images = data.getAll('images'); // Handles multiple file inputs if required
+
+    console.log("Sent itemName:", itemName);
+    console.log("Sent description:", description);
+    console.log("Sent category:", category);
+    console.log("Sent swapDetails:", swapDetails);
+    console.log("Sent images:", images);
+
+
+     // Prepare query string
+     const queryParams = new URLSearchParams({
+      itemName,
+      description,
+      category,
+      swapDetails,
+    });
+
+     // Append image names to the query string
+     images.forEach((file) => {
+      queryParams.append('images', file.name); // Only sending file names
+    });
+
+    //images.forEach((image) => queryString.append('images', image));
+
+    runDBCallAsync(`http://localhost:3000/api/putnewListing?${queryParams.toString()}`)
+    }; // end handle submit
+
+
+            
+    async function runDBCallAsync(url) {
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if(data.data === "inserted"){
+    console.log("New Listing is succesfull!")
+    window.location = '/';
+    } else {
+    console.log("not valid ")
+    }
+      
+    }
+
 
   return (
 
@@ -20,38 +73,38 @@ export default function newlisting() {
       <div className="card p-4">
         <h2 className="text-center">New Listing</h2>
         
-        <form>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="form-group">
             <label htmlFor="itemName" className="form-label">Item Name:</label>
-            <input type="text" className="form-control" id="itemName" />
+            <input type="text" className="form-control" id="itemName" name="itemName"/>
           </div>
 
           <div className="form-group">
             <label htmlFor="description" className="form-label">Description:</label>
-            <textarea className="form-control" id="description" rows="3"></textarea>
+            <textarea className="form-control" id="description" name="description" rows="3"></textarea>
           </div>
 
           <div className="form-group">
             <label htmlFor="category" className="form-label">Category:</label>
-            <select className="form-select" id="location">
+            <select className="form-select" id="category" name="category">
               <option value="">Select Category</option>
-              <option value="Location1">Small</option>
-              <option value="Location2">Medium</option>
-              <option value="Location3">Large</option>
+              <option value="Small">Small</option>
+              <option value="Medium">Medium</option>
+              <option value="Large">Large</option>
             </select>
           </div>
 
           <div className="form-group">
             <label htmlFor="images" className="form-label">Images:</label>
-            <input type="file" className="form-control" id="images" multiple />
+            <input type="file" className="form-control" id="images" name="images" multiple />
           </div>
 
           <div className="form-group">
             <label htmlFor="swapDetails" className="form-label">Swap Details:</label>
-            <textarea className="form-control" id="swapDetails" rows="3"></textarea>
+            <textarea className="form-control" id="swapDetails" name="swapDetails" rows="3"></textarea>
           </div>
 
-          <div className="form-group">
+          {/* <div className="form-group">
             <label htmlFor="location" className="form-label">Location:</label>
             <select className="form-select" id="location">
               <option value="">Select Location</option>
@@ -59,9 +112,9 @@ export default function newlisting() {
               <option value="Location2">Dublin 2</option>
               <option value="Location3">Dublin 3</option>
             </select>
-          </div>
+          </div> */}
 
-          <div className="form-group">
+          {/* <div className="form-group">
             <label className="form-label">Rating:</label>
             <div>
               {[1, 2, 3, 4, 5].map((star) => (
@@ -74,7 +127,7 @@ export default function newlisting() {
                 </span>
               ))}
             </div>
-          </div>
+          </div> */}
 
           <button type="submit" className="btn btn-primary w-100">Publish</button>
         </form>

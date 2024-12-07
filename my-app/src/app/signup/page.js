@@ -15,13 +15,19 @@ import '../styles/Login.css';
 import '../styles/Style.css';
 
 export default function SignUp() {
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    let name = data.get('name');
+    let fullName = data.get('fullName');
     let email = data.get('email');
     let pass = data.get('pass');
     let confirmPass = data.get('confirmPass');
+
+    console.log("Sent fullName:" + fullName)
+    console.log("Sent email:" + email)
+		console.log("Sent pass:" + pass)
+		console.log("Sent confirmPass:" + confirmPass)
 
     // Password match check
     if (pass !== confirmPass) {
@@ -29,14 +35,17 @@ export default function SignUp() {
       return;
     }
 
-    runDBCallAsync(`http://localhost:3000/api/newregister?name=${name}&email=${email}&pass=${pass}`);
+    runDBCallAsync(`http://localhost:3000/api/signUp?fullName=${fullName}&email=${email}&pass=${pass}&confirmPass=${confirmPass}`);
   };
+
 
   async function runDBCallAsync(url) {
     const res = await fetch(url);
     const data = await res.json();
-    if (data.data === 'valid') {
+
+    if (data.data === 'inserted') {
       console.log('Sign up is successful!');
+      window.location = '/login';
     } else {
       console.log('Sign up failed');
     }
@@ -50,6 +59,7 @@ export default function SignUp() {
       {/* Main Content Container */}
       <Container maxWidth="sm" sx={{ paddingTop: '20px', paddingBottom: '20px' }}>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '70vh' }}>
+          
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -72,10 +82,10 @@ export default function SignUp() {
               margin="normal"
               required
               fullWidth
-              id="name"
+              id="fullName"
               label="Full Name"
-              name="name"
-              autoComplete="name"
+              name="fullName"
+              autoComplete="fullName"
               autoFocus
               InputLabelProps={{
                 style: { color: '#66CCFF' },
@@ -131,14 +141,7 @@ export default function SignUp() {
             />
 
             {/* Submit Button */}
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              className="login-button"
-            >
-              Sign Up
-            </Button>
+            <Button type="submit" fullWidth variant="contained" className="login-button">Sign Up</Button>
           </Box>
         </Box>
       </Container>

@@ -7,32 +7,34 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Header from '../components/Header';  // Update path if needed
 import Footer from '../components/Footer';  // Update path if needed
-
-// Add Bootstrap
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-// Import the CSS file
 import '../styles/Login.css';
 import '../styles/Style.css';
 
 export default function Login() {
+
   const handleSubmit = (event) => {
+    console.log('Handling submit');
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    let email = data.get('email');
-    let pass = data.get('pass');
-    runDBCallAsync(`http://localhost:3000/api/newregister?email=${email}&pass=${pass}`);
+    const email = data.get('email');
+    const pass = data.get('pass');
+    runDBCallAsync(`http://localhost:3000/api/login?email=${email}&pass=${pass}`);
   };
 
   async function runDBCallAsync(url) {
     const res = await fetch(url);
     const data = await res.json();
-    if (data.data === 'valid') {
-      console.log('Login is valid!');
+
+    if (data.status === true) { // Boolean check
+        console.log("Login is successful");
+        localStorage.setItem('isLoggedIn', 'true'); // Mark user as logged in
+        window.location = '/';
     } else {
-      console.log('Not valid');
+        console.log('Invalid login');
+        alert('Invalid email or password');
     }
-  }
+}
 
   return (
     <>
