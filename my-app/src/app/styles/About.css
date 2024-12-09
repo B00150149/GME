@@ -1,0 +1,85 @@
+/* About Us Page Styles */
+.about-container {
+    padding: 40px;
+    background-color: #f4f4f9;
+  }
+  
+  .about-section {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  
+  .about-title {
+    font-size: 3rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .about-description {
+    font-size: 1.2rem;
+    color: #666;
+    line-height: 1.6;
+  }
+  
+  .contact-section {
+    margin-top: 50px;
+    text-align: center;
+  }
+  
+  .contact-form-container {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  form {
+    max-width: 600px;
+    width: 100%;
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  textarea.form-control {
+    resize: vertical;
+  }
+  
+  button.btn {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  button.btn:hover {
+    background-color: #218838;
+  }
+  
+  footer {
+    margin-top: 60px;
+  }
+  

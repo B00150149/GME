@@ -1,90 +1,101 @@
-.homepage-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #e6f7ff; /* Light blue background */
-    padding: 20px;
-  }
-  
-  .homepage-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    max-width: 1200px; /* Max width for larger screens */
-    flex-wrap: wrap; /* Allow content to wrap on smaller screens */
-  }
-  
-  .homepage-left {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;  /* Center content vertically */
-    align-items: center;      /* Center content horizontally */
-    text-align: center;       /* Ensure text is centered */
-    margin-right: 20px;
-  }
-  
-  .title {
-    font-size: 4rem; /* Big text size for 'Greener Me' */
-    font-weight: bold;
-    color: #3399ff; /* Light blue color */
-    margin-bottom: 20px;
-  }
-  
-  .image-container {
-    max-width: 100%;
-    height: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center; /* Center the image */
-  }
-  
-  .homepage-right {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    text-align: center;
-  }
-  
-  .button {
-    display: inline-block;
-    padding: 15px 30px;
-    margin-bottom: 15px;
-    font-size: 1.25rem;
-    font-weight: bold;
-    background-color: #66CCFF; /* Light blue button */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-  }
-  
-  .button:hover {
-    background-color: #33b5e5; /* Darker blue on hover */
-  }
-  
-  @media (max-width: 768px) {
-    .homepage-content {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .homepage-left {
-      text-align: center;
-      margin-right: 0;
-      margin-bottom: 20px;
-    }
-  
-    .homepage-right {
-      align-items: center;
-    }
-  
-    .title {
-      font-size: 3rem; /* Smaller text size on mobile */
-    }
-  }
-  
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background-color: #f8f8f8;
+  color: #333;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Image Section */
+.image-container {
+  position: relative;  /* Allows for positioning of elements inside the container */
+  width: 100%;
+  height: calc(100vh - 120px);  /* Adjust height to fill the screen between the header and footer */
+}
+
+.homepage-image {
+  position: absolute;  /* Image will fill the container */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  /* Ensures image covers the area */
+}
+
+/* Overlay for Sheer Effect */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Black background with 40% opacity for a sheer effect */
+  z-index: 1;
+}
+
+/* Text Overlay (Title and Subheading) */
+.text-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  z-index: 2;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 300; /* Thinner font weight */
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  margin-top: 10px;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+
+/* Button Container */
+.button-container {
+  position: absolute;
+  bottom: 30px;  /* Positions the buttons near the bottom */
+  left: 50%;
+  transform: translateX(-50%);  /* Centers the buttons horizontally */
+  text-align: center;
+  z-index: 2;
+}
+
+.button {
+  background-color: #115f31;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  margin: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 300px;
+  font-weight: 600;
+}
+
+.button:hover {
+  background-color: #43865f;
+  transform: translateY(-2px);
+}
+
+.button:focus {
+  outline: none;
+}
+
