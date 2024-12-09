@@ -39,7 +39,7 @@ export async function GET(req, res) {
       const collection = db.collection('users');
   
       // Insert the user data
-      const user = { fullName, email, pass, confirmPass, wishlist: [],createdAt: new Date() };
+      const user = { fullName, email, pass, confirmPass, products: [], wishlist: [], createdAt: new Date() };
       const insertResult = await collection.insertOne(user);
   
       console.log("Insert result:", insertResult);

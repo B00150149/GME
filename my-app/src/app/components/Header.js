@@ -1,15 +1,16 @@
-//import React from 'react';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link'; // Import Next.js Link component
 import Image from 'next/image';
 import '../styles/Header.css';
 import logo from '../images/logo.png';  // Adjust the path if necessary
-import { FaHeart, FaSearch, FaEnvelope } from 'react-icons/fa'; // Import heart, search, and envelope icons
+import { FaHeart, FaSearch, FaEnvelope, FaUser } from 'react-icons/fa'; // Import heart, search, and envelope icons
 
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false); 
+
 
   useEffect(() => {
     // Fetch the session email
@@ -24,9 +25,10 @@ export default function Header() {
                 //console.error('No user data found');
             }
     };
-
     fetchUserData();
   }, []);
+
+
 
   useEffect(() => {  
     // Check if the user is logged in by checking localStorage
@@ -35,6 +37,7 @@ export default function Header() {
   }, []);
 
 
+  
   function handleLogout() {
     // Logout logic
      localStorage.removeItem('isLoggedIn');
@@ -97,8 +100,9 @@ export default function Header() {
           <Link href="/wishlist" className="wishlist-link">
             <FaHeart className="wishlist-icon" />
           </Link>
-          <Link href="/signup">Signup</Link>
-          {/* <Link href="/login">Login</Link> */}
+          {/* <Link href="/signup">Signup</Link> */}
+          {!isLoggedIn && <Link href="/signup">Signup</Link>}
+
           {isLoggedIn ? (
           <button
             onClick={handleLogout}
@@ -109,6 +113,8 @@ export default function Header() {
               cursor: 'pointer',
               padding: '0',
             }}
+
+            
           >
             Logout
           </button>
@@ -116,6 +122,31 @@ export default function Header() {
           <Link href="/login">Login</Link>
         )}
 
+
+     {/* For user icon after login */}
+     {isLoggedIn && (
+          <div className="dropdown">
+            <button
+              className="user-link"
+              onClick={() => setDropdownOpen(!dropdownOpen)} // Toggle the dropdown visibility
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'white',
+                cursor: 'pointer',
+              }}
+            >
+              <FaUser className="user-icon" /> 
+            </button>
+            {dropdownOpen && (
+              <div className="dropdown-menu">
+                <Link href="/newlisting" className="dropdown-item">New Listing</Link>
+                <button onClick={handleLogout} className="dropdown-item">Logout</button>
+              </div>
+            )}
+          </div>
+        )}
+    
           
         </div>
       </header>
@@ -130,7 +161,6 @@ export default function Header() {
         </ul>
       </nav>
 
-      {/* <div>    {isLoggedIn && userData ?(<div>Welcome { userData.fullName} !</div>):(<div></div>)} </div> */}
 
       <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>  
         {isLoggedIn && userData ? (<div>Welcome {userData.fullName}!</div>) : (<div></div>)}

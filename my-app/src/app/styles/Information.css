@@ -11,7 +11,35 @@
   padding: 20px;
 }
 
+
+@media (max-width: 1024px) {
+  .grid-container {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-areas:
+      "top top top top"
+      "left main main right"
+      "left main main right";
+  }
+}
+
+
+
 /* ####################################################### Top container######################################################## */
+@media (max-width: 768px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "top"
+      "left"
+      "main"
+      "right";
+  }
+  .left, .main, .right {
+    text-align: center;
+    padding: 10px;
+  }
+}
+
 /* Top container */
 .top {
   grid-area: top;
@@ -138,6 +166,21 @@
   background-color: #0056b3;
 }
 
+@media (max-width: 576px) {
+  .learn-button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+  h4 {
+    font-size: 18px;
+  }
+  p {
+    font-size: 14px;
+  }
+  .image-container img {
+    width: 80%;
+  }
+}
 
 /* ####################################################### Middle container######################################################## */
 .main {
@@ -235,4 +278,13 @@
   background-color: #0056b3;
 }
 
+/* Add margin between sections */
+.left, .main, .right {
+  margin: 20px 0;
+}
 
+/* Add hover effects for better interactivity */
+.image-container img:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
