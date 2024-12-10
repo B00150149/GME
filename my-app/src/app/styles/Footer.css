@@ -1,7 +1,7 @@
 
 /* Footer Container */
 .footer {
-    background-color: #2c3e50; /* Dark background for the footer */
+    background-color: #2e643b;
     padding: 20px 30px;
     text-align: center;
     color: #fff; /* White text for contrast */
@@ -38,7 +38,7 @@
 
 .footer-links a {
     text-decoration: none;
-    color: #66CCFF; /* Light blue color for links */
+    color: #ffffff; 
     font-size: 16px;
     transition: color 0.3s ease;
 }
@@ -61,7 +61,7 @@
 }
 
 .footer-social a:hover {
-    color: #66CCFF; /* Light blue color on hover */
+    color: #5a4a2a;
 }
 
 /* Mobile adjustments: Center content on smaller screens */

@@ -1,44 +1,46 @@
-// import * as React from 'react';
-// import Header from '../components/Header'; 
-// import Footer from '../components/Footer'; 
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import '../styles/Login.css';
-// import '../styles/Style.css';
+'use client';
+import React from 'react';
+import Header from '../components/Header';  // Adjust path if needed
+import Footer from '../components/Footer';  // Adjust path if needed
+import '../styles/About.css';  // Import styles for the About page
 
-// export default function About() {
+export default function About() {
+  return (
+    <>
+      <Header />
+      
+      <div className="about-container">
+        <div className="about-section">
+          <h1 className="about-title">About Us</h1>
+          <p className="about-description">
+            Welcome to GreenerMe! We are a passionate community of eco-conscious individuals committed to creating a more sustainable future.
+            Our mission is to encourage individuals to embrace eco-friendly practices, reduce waste, and contribute to a greener world. 
+            Our platform connects people with eco-friendly products, services, and solutions that empower them to make a positive impact.
+          </p>
+        </div>
 
-//     return (
-//         <>
+        <div className="mission-section">
+          <h2 className="mission-title">Our Mission</h2>
+          <p className="mission-description">
+            At GreenerMe, we believe in the power of collective action. We aim to create a sustainable future by promoting products and 
+            initiatives that align with our core values of sustainability, community, and innovation. Our mission is to make it easier for individuals 
+            to adopt green solutions, live sustainably, and reduce their environmental footprint. Together, we can create lasting change and make the world 
+            a better place for future generations.
+          </p>
+        </div>
 
-//             <Header />
-//             <h1>About</h1>
-//             <h2>Mission statement here*</h2>
-//             <h1>Contact Us</h1>
+        <div className="values-section">
+          <h2 className="values-title">Our Core Values</h2>
+          <ul className="values-list">
+            <li>🌱 **Sustainability**: We prioritize products and services that are eco-friendly, renewable, and help reduce waste.</li>
+            <li>🤝 **Community**: We believe in the power of community, collaboration, and sharing knowledge to create a bigger impact.</li>
+            <li>💡 **Innovation**: We are committed to discovering new ways to make sustainable living more accessible and practical for everyone.</li>
+            <li>🌍 **Global Impact**: We aim to make a global impact by inspiring individuals to adopt sustainable practices in their daily lives.</li>
+          </ul>
+        </div>
+      </div>
 
-//             <div class="container contact-form">
-//                 <div className="contact-image">
-//                     <img src="https://image.ibb.co/kUagtU/rocket_contact.png" alt="rocket_contact" style="display: block; margin: 0 auto; width: 70%;" />
-//                 </div>
-//             </div>form id="contact-form" onSubmit={handleSubmit(onSubmit)} method="POST"</>
-//             <div className="form-group">
-//                 <label htmlFor="name">Name</label>
-//                 <input type="text" className="form-control" />
-//             </div>
-//             <div className="form-group">
-//                 <label htmlFor="exampleInputEmail1">Email address</label>
-//                 <input type="email" className="form-control" aria-describedby="emailHelp" />
-//             </div>
-//             <div className="form-group">
-//                 <label htmlFor="message">Message</label>
-//                 <textarea className="form-control" rows="5"></textarea>
-//             </div>
-//             <button type="submit" className="btn btn-primary">Submit</button>
-//             </div>
-
-
-
-//           <Footer/>
-//           </>
-//     );}
-    
-// }
+      <Footer />
+    </>
+  );
+}
