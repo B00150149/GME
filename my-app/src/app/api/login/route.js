@@ -42,6 +42,17 @@ export async function GET(req, res) {
 
         valid = true;
         console.log("login valid");
+
+        //save use wishlist in current session wishlist
+        if(findResult[0].wishlist.length > 0){
+
+            console.log("Wishlis:", findResult[0].wishlist);
+            const collectionw = db.collection('wishlist');
+            
+            findResult[0].wishlist.map((item) =>
+                 collectionw.insertOne(item)
+            );
+        }
     
     } else {
     valid = false;
