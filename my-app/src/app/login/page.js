@@ -19,7 +19,7 @@ export default function Login() {
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const pass = data.get('pass');
-    runDBCallAsync(`http://localhost:3000/api/login?email=${email}&pass=${pass}`);
+    runDBCallAsync(`/api/login?email=${email}&pass=${pass}`);
   };
 
   async function runDBCallAsync(url) {

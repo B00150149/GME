@@ -35,7 +35,7 @@ export default function SignUp() {
       return;
     }
 
-    runDBCallAsync(`http://localhost:3000/api/signUp?fullName=${fullName}&email=${email}&pass=${pass}&confirmPass=${confirmPass}`);
+    runDBCallAsync(`/api/signUp?fullName=${fullName}&email=${email}&pass=${pass}&confirmPass=${confirmPass}`);
   };
 
 

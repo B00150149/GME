@@ -46,7 +46,7 @@ export default function newlisting() {
 
     //images.forEach((image) => queryString.append('images', image));
 
-    runDBCallAsync(`http://localhost:3000/api/putnewListing?${queryParams.toString()}`)
+    runDBCallAsync(`/api/putnewListing?${queryParams.toString()}`)
     }; // end handle submit
 
 
