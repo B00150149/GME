@@ -51,7 +51,7 @@ export default function Login() {
             className="login-container"
             sx={{
               padding: '20px',
-              backgroundColor: '#1a1a1a',
+             // backgroundColor: '#1a1a1a',
               borderRadius: 2,
               boxShadow: 3,
               width: '100%',
@@ -72,7 +72,7 @@ export default function Login() {
               autoComplete="email"
               autoFocus
               InputLabelProps={{
-                style: { color: '#66CCFF' },
+               style: { color: '#66CCFF' },
               }}
               className="login-textfield"
             />

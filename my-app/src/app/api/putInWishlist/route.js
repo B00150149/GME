@@ -10,16 +10,17 @@ export async function GET(req, res) {
    const { searchParams } = new URL(req.url);
    const itemName = searchParams.get('itemName');
    const description = searchParams.get('description');
-  //  const category = searchParams.get('category');
-  //   const swapDetails = searchParams.get('swapDetails');
+   const category = searchParams.get('category');
+   const userName = searchParams.get('userName');
+   //const swapDetails = searchParams.get('swapDetails');
     const images = searchParams.getAll('images'); // Handle multiple files if needed
 
   //  console.log('Received parameters:', { itemName, description, category, swapDetails, images });
-   console.log('Received parameters:', { itemName, description, images });
+   console.log('Received parameters:', { itemName, description, images , category, userName});
 
  
   //  console.log(`Item Name: ${itemName}, Description: ${description}, Category: ${category}, Swap Details: ${swapDetails}, Images:${images} `);
-  console.log(`Item Name: ${itemName}, Description: ${description}, Images:${images} `);
+  console.log(`Item Name: ${itemName}, Description: ${description}, Images:${images} , category:${category}, userName: ${userName}`);
 
 
   // =================================================
@@ -37,9 +38,9 @@ export async function GET(req, res) {
        const myobj = {
         itemName: itemName,
         description: description,
-        // category: category,
-        // swapDetails: swapDetails,
-        // images: images
+         category: category,
+         userName: userName,
+        images: images
        };
  
        const insertResult = await collection.insertOne(myobj);

@@ -140,8 +140,14 @@ export default function Header() {
           <li><Link href="/information">Information</Link></li>
           <li><Link href="/products">Products</Link></li>
           <li><Link href="/about-us">About Us</Link></li>
+          <li><Link href="/newlisting">Upload Product</Link></li>
         </ul>
       </nav>
+
+      <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>  
+        {isLoggedIn && userData ? (<div>Welcome {userData.fullName}!</div>) : (<div></div>)}
+      </div>
+      
     </div>
   );
 }

@@ -15,6 +15,10 @@ export async function GET(req, res) {
     const swapDetails = searchParams.get('swapDetails');
     const images = searchParams.getAll('images'); // Handle multiple files if needed
 
+    //add wishlist in loggedin users data
+    let session = await getCustomSession();
+    const email = session.email;
+    const fullName = session.fullName;
 
     console.log("Received itemName:", itemName);
     console.log("Received description:", description);
@@ -41,26 +45,27 @@ export async function GET(req, res) {
       const db = client.db(dbName);
       const collection = db.collection('newlisting');
   
+
       // Insert the Listing data
       const newlisting = { itemName,
         description,
         category,
         swapDetails,
         images, // Save images as binary
+        userName: fullName,
+        email: email,
         createdAt: new Date(), };
 
       const insertResult = await collection.insertOne(newlisting);
       console.log("Insert result:", insertResult);
  
-      //add wishlist in loggedin users data
-      let session = await getCustomSession();
-      const email = session.email;
+      
       if(email){ //or use isLoggedin
        const collection2 = db.collection('users');
        // Add the new item to the `items` list for the user
        const updateResult = await collection2.updateOne(
          { email: email }, // Find user by email
-         { $push: { products: newlisting } } // Add new item to `wishlist` array
+         { $push: { products: insertResult.insertedId } } // Add new item to `wishlist` array
        );
 
        console.log("Update result:", updateResult);

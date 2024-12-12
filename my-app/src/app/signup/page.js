@@ -67,7 +67,7 @@ export default function SignUp() {
             className="login-container"
             sx={{
               padding: '20px',
-              backgroundColor: '#1a1a1a',
+           // backgroundColor: '#1a1a1a',
               borderRadius: 2,
               boxShadow: 3,
               width: '100%',

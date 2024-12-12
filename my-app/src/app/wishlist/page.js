@@ -10,6 +10,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Wishlist() {
     const [wishlist, setWishlist] = useState([]);
+    const[basePath, setPath] = useState('https://tudublin-my.sharepoint.com/:f:/r/personal/b00156196_mytudublin_ie/Documents/Major%20Project%20Folder/Images/');
+
 
     // Fetch wishlist items from the API
     useEffect(() => {
@@ -21,27 +23,44 @@ export default function Wishlist() {
             .catch((error) => console.error('Error fetching wishlist:', error));
     }, []);
 
+
     return (
         <>
             {/* Header */}
             <Header />
 
-            {/* Wishlist Section */}
-            <Container>
-                <h1>My Wishlist</h1>
-                <Box>
+        <div className="container mt-4">
+                <h1 className="text-center mb-4">My Wishlist</h1>
+                <div className="row">
                     {wishlist.length > 0 ? (
                         wishlist.map((item) => (
-                            <Box key={item._id} border={1} p={2} mb={2}>
-                                <h3>{item.itemName}</h3>
-                                <p>{item.description}</p>
-                            </Box>
+                            <div key={item._id} className="col-md-4 mb-4">
+                                <div className="card h-100">
+                                    <img 
+                                    variant="top"
+                                    style={{ height: '60%' }} // Pass height as a string
+                                    src={basePath+item.images[0]}//{item.images && item.images[0]} // Use the first image if available
+                                    alt={item.itemName}
+                                    className="p-3"
+
+                                    />
+                                    <div className="card-body">
+                                        <h5 className="card-title text-center">Item: {item.itemName}</h5>
+                                        <p className="card-text text-center">Description: {item.description}</p>
+                                        <p className="card-text text-center">Owner: {item.userName} </p>
+                                        <p className="text-muted text-center">Category: {item.category}</p>
+                                    </div>
+                                </div>
+                            </div>
                         ))
                     ) : (
-                        <p>Your wishlist is empty.</p>
+                        <div className="col-12">
+                            <p className="text-center">Your wishlist is empty.</p>
+                        </div>
                     )}
-                </Box>
-            </Container>
+                </div>
+            </div>
+
 
             {/* Footer */}
             <Footer />

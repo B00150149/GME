@@ -10,11 +10,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function newlisting() {
   // const [rating, setRating] = useState(3); // Default rating
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = (event) => {
     console.log("handling submit");
     event.preventDefault();
+    setIsSubmitting(true); 
 
     const data = new FormData(event.currentTarget);
     let itemName = data.get('itemName');
@@ -56,9 +57,10 @@ export default function newlisting() {
 
     if(data.data === "inserted"){
     console.log("New Listing is succesfull!")
-    window.location = '/';
+    window.location = '/products';
     } else {
     console.log("not valid ")
+     setIsSubmitting(false);
     }
       
     }
@@ -129,7 +131,10 @@ export default function newlisting() {
             </div>
           </div> */}
 
-          <button type="submit" className="btn btn-primary w-100">Publish</button>
+          <button type="submit" className="btn btn-primary w-100" disabled={isSubmitting} >
+              {isSubmitting ? 'Publishing...' : 'Publish'}
+          </button>
+
         </form>
       </div>
     </div>
