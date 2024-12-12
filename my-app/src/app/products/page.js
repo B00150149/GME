@@ -15,7 +15,7 @@ export default function Products() {
   
   // Fetch products from the API
   useEffect(() => {
-    fetch('http://localhost:3000/api/getProducts')
+    fetch('/api/getProducts')
       .then((res) => res.json())
       .then((data) => {
         setData(data);
@@ -24,13 +24,13 @@ export default function Products() {
 
   function putInWishlist(itemName, description, images, category, userName, email ) {
     console.log("putting in wishlist:", {itemName, description, images, category }); 
-    fetch(`http://localhost:3000/api/putInWishlist?itemName=${encodeURIComponent(itemName)}&description=${encodeURIComponent(description)} &images=${encodeURIComponent(images)}&category=${encodeURIComponent(category)}&userName=${encodeURIComponent(userName)}&userEmail=${encodeURIComponent(email)}`);
+    fetch(`/api/putInWishlist?itemName=${encodeURIComponent(itemName)}&description=${encodeURIComponent(description)} &images=${encodeURIComponent(images)}&category=${encodeURIComponent(category)}&userName=${encodeURIComponent(userName)}&userEmail=${encodeURIComponent(email)}`);
     alert("Added to Wishlist"); 
   }
 
   function putInRequest(userName, email,  itemName) {
     console.log("putting in request:", {userName, email, itemName}); 
-    fetch(`http://localhost:3000/api/putInRequest?userName=${encodeURIComponent(userName)}&userEmail=${encodeURIComponent(email)}&itemName=${encodeURIComponent(itemName)}`);
+    fetch(`/api/putInRequest?userName=${encodeURIComponent(userName)}&userEmail=${encodeURIComponent(email)}&itemName=${encodeURIComponent(itemName)}`);
     alert("Swap Request sent to: " + userName); // Displaying the message in an alert box
   }
 

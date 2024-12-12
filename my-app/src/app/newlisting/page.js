@@ -31,7 +31,7 @@ export default function newlisting() {
     console.log("Sent images:", images);
 
 
-     // Prepare query string
+     // All data that needs to be passed
      const queryParams = new URLSearchParams({
       itemName,
       description,
@@ -44,9 +44,7 @@ export default function newlisting() {
       queryParams.append('images', file.name); // Only sending file names
     });
 
-    //images.forEach((image) => queryString.append('images', image));
-
-    runDBCallAsync(`http://localhost:3000/api/putnewListing?${queryParams.toString()}`)
+    runDBCallAsync(`/api/putnewListing?${queryParams.toString()}`)
     }; // end handle submit
 
 

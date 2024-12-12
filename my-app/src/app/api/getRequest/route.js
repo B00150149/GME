@@ -10,7 +10,7 @@ export async function GET(req, res) {
     
     // =================================================
     const { MongoClient } = require('mongodb');
-    const url = "mongodb+srv://root:test@cluster0.dkegh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+    const url = process.env.DB_ADDRESS
     const client = new MongoClient(url);
     const dbName = 'greenerme'; // database name
 
@@ -18,6 +18,7 @@ export async function GET(req, res) {
     console.log('Connected successfully to server');
     const db = client.db(dbName);
     const collection = db.collection('swapRequests'); // collection name
+    //filter rout request for the particular user 
     const findResult = await collection.find({userEmail:email}).toArray();
     console.log('Found documents =>', findResult);
 

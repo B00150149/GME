@@ -35,7 +35,7 @@ export default function SignUp() {
       return;
     }
 
-    runDBCallAsync(`http://localhost:3000/api/signUp?fullName=${fullName}&email=${email}&pass=${pass}&confirmPass=${confirmPass}`);
+    runDBCallAsync(`/api/signUp?fullName=${fullName}&email=${email}&pass=${pass}&confirmPass=${confirmPass}`);
   };
 
 
@@ -67,7 +67,6 @@ export default function SignUp() {
             className="login-container"
             sx={{
               padding: '20px',
-           // backgroundColor: '#1a1a1a',
               borderRadius: 2,
               boxShadow: 3,
               width: '100%',

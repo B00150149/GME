@@ -14,22 +14,20 @@ export async function GET(req, res) {
   
   
 
-   //add wishlist in loggedin users data
+   //get the user sending equest details through sessions
    let session = await getCustomSession();
    const senderEmail = session.email;
    const senderName = session.fullName;
 
-  //  console.log('Received parameters:', { itemName, description, category, swapDetails, images });
    console.log('Received parameters:', { itemName, userName,userEmail });
 
- 
-  //  console.log(`Item Name: ${itemName}, Description: ${description}, Category: ${category}, Swap Details: ${swapDetails}, Images:${images} `);
-  console.log(`Item Name: ${itemName}, userName: ${userName} `);
+   console.log(`Item Name: ${itemName}, userName: ${userName} `);
+
 
 if(senderEmail){
   // =================================================
    const { MongoClient } = require('mongodb');
-   const url = "mongodb+srv://root:test@cluster0.dkegh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+   const url = process.env.DB_ADDRESS
    const client = new MongoClient(url);
    const dbName = 'greenerme';
  
@@ -56,7 +54,7 @@ if(senderEmail){
        console.log('Insert Result:', insertResult);
 
        
-       //if(senderEmail){ //or use isLoggedin
+       //The request wll be stored in empty array in user
         const collection1 = db.collection('users');
         // Add the new item to the `items` list for the user
         const updateResult = await collection1.updateOne(
