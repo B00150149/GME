@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
-import Header from '../components/Header';  // Adjust path if needed
-import Footer from '../components/Footer';  // Adjust path if needed
-import '../styles/About.css';  // Import styles for the About page
+import Header from '../components/Header';  
+import Footer from '../components/Footer';  
+import '../styles/About.css';  
 
 export default function About() {
   return (
