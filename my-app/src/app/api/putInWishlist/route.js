@@ -25,7 +25,7 @@ export async function GET(req, res) {
 
   // =================================================
    const { MongoClient } = require('mongodb');
-   const url = process.env.DB_ADDRESS
+      const url = "mongodb+srv://root:test@cluster0.dkegh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
    const client = new MongoClient(url);
    const dbName = 'greenerme';
  
