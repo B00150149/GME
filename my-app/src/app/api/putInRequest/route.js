@@ -1,4 +1,5 @@
 import { getCustomSession } from "../sessionCode.js";
+import { MongoClient, ObjectId } from 'mongodb';
 
 export async function GET(req, res) {
     // Make a note we are on 
@@ -11,7 +12,9 @@ export async function GET(req, res) {
    const userName = searchParams.get('userName');
    const userEmail = searchParams.get('userEmail');
    const itemName = searchParams.get('itemName');
-  
+   const swapItemId = searchParams.get('swapItemId');
+   const itemId = searchParams.get('ItemId');
+   const swapItemName = searchParams.get('swapItemName');
   
 
    //get the user sending equest details through sessions
@@ -41,12 +44,14 @@ if(senderEmail){
         senderName: senderName,
         senderEmail: senderEmail,
         itemName: itemName,
+        itemId: itemId,
+        swapItemId: swapItemId,
+        swapItemName: swapItemName,
         userName: userName,
         userEmail: userEmail,
         status: 'Pending',
+        dealStatus: 'Open',
         DateRequested: new Date(),
-        // category: category,
-        // swapDetails: swapDetails,
         // images: images
        };
  
@@ -80,6 +85,41 @@ if(senderEmail){
  
 
 
+//Make a put function for *updating* the status of message in database
+export async function PUT(req) {
+  try {
+    const { requestId } = await req.json(); // Get request ID from request body
+
+    if (!requestId) {
+      return new Response(JSON.stringify({ error: 'Request ID is required' }), { status: 400 });
+    }
+
+    const { MongoClient } = require('mongodb');
+    const url = "mongodb+srv://root:test@cluster0.dkegh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+    const client = new MongoClient(url);
+    const dbName = 'greenerme';
+
+    await client.connect();
+    const db = client.db(dbName);
+    const collection = db.collection('swapRequests');
+
+    // Update request status to "Accepted"
+    const updateResult = await collection.updateOne(
+      { _id: new ObjectId(requestId) },
+      { $set: { status: 'Accepted' } }
+    );
+
+    if (updateResult.modifiedCount === 0) {
+      return new Response(JSON.stringify({ error: 'Request not found or no update made' }), { status: 404 });
+    }
+
+    // Respond with success
+    return new Response(JSON.stringify({ message: 'Request accepted' }), { status: 200 });
+  } catch (error) {
+    console.error('Error updating request:', error);
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
+  }
+}
 
 
  

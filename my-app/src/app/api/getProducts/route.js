@@ -12,7 +12,7 @@
         console.log('Connected successfully to server');
         const db = client.db(dbName);
         const collection = db.collection('newlisting'); // collection name
-        const findResult = await collection.find({}).toArray();
+        const findResult = await collection.find({dealStatus:"Open"}).toArray();
         console.log('Found documents =>', findResult);
 
         //==========================================================

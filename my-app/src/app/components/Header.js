@@ -3,7 +3,7 @@ import Link from 'next/link'; // Import Next.js Link component
 import Image from 'next/image';
 import '../styles/Header.css';
 import logo from '../images/logo2.png';  // Adjust the path if necessary
-import { FaHeart, FaSearch, FaEnvelope, FaUser } from 'react-icons/fa'; // Import heart, search, and envelope icons
+import { FaHeart, FaSearch, FaEnvelope, FaUser , FaComment} from 'react-icons/fa'; // Import heart, search, and envelope icons
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -88,6 +88,13 @@ export default function Header() {
           </Link>
           {!isLoggedIn && <Link href="/signup">Signup</Link>}
 
+          {/* Messenger icon visible after login */}
+          {isLoggedIn && (
+            <Link href="/messages" className="messenger-link">
+                <FaComment className="messenger-icon" />
+            </Link>
+          )}
+
           {isLoggedIn ? (
             <button
               onClick={handleLogout}
@@ -133,6 +140,8 @@ export default function Header() {
           )}
         </div>
       </header>
+
+      
       {/* Secondary Navigation Bar */}
       <nav className="secondary-nav">
         <ul className="secondary-nav__list">

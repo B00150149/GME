@@ -8,11 +8,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Card, Row, Col } from 'react-bootstrap';
 //import { Button } from 'react-bootstrap';
 import { FaHeart } from 'react-icons/fa'; // Import the heart icon from react-icons
+import '../styles/swap.css';
+import ChildModal from '../productSwap/page.js'; //for the sap selection one swap request is ussed
 
 export default function Products() {
   const [data, setData] = useState([]); // Store the fetched data
   const[basePath, setPath] = useState('https://tudublin-my.sharepoint.com/:f:/r/personal/b00156196_mytudublin_ie/Documents/Major%20Project%20Folder/Images/');
-  
+  const [showModal, setShowModal] = useState(false);
+  const [selectedValue, setSelectedValue] = useState(null); // Store selected value from modal
+  const [selectedItem, setSelectedItem] = useState(""); // Store selected Item
+
+
   // Fetch products from the API
   useEffect(() => {
     fetch('/api/getProducts')
@@ -28,12 +34,23 @@ export default function Products() {
     alert("Added to Wishlist"); 
   }
 
-  function putInRequest(userName, email,  itemName) {
-    console.log("putting in request:", {userName, email, itemName}); 
-    fetch(`/api/putInRequest?userName=${encodeURIComponent(userName)}&userEmail=${encodeURIComponent(email)}&itemName=${encodeURIComponent(itemName)}`);
+  function putInRequest(userName, email,  itemName, itemId,swapItemId,swapItemName) {
+    console.log("putting in request:", {userName, email, itemName,swapItemId}); 
+    setShowModal(false);
+    fetch(`/api/putInRequest?userName=${encodeURIComponent(userName)}&userEmail=${encodeURIComponent(email)}&itemName=${encodeURIComponent(itemName)}&ItemId=${encodeURIComponent(itemId)}&swapItemId=${encodeURIComponent(swapItemId)}&swapItemName=${encodeURIComponent(swapItemName)}`);
     alert("Swap Request sent to: " + userName); // Displaying the message in an alert box
   }
 
+  function showModalForSelectedProduct(index){
+    setSelectedItem(index);
+    setShowModal(true);
+  }
+
+  // Function to handle value from child
+  const handleSelect = (value) => {
+    setSelectedValue(value); // Update state
+    //setShowModal(false); // Close modal after selection
+  };
 
   return (
     <div className="products">
@@ -64,7 +81,16 @@ export default function Products() {
                     </Card.Text>
                   </Card.Body>
                   <Card.Footer className="d-flex justify-content-between align-items-center">
-                    <Button onClick={() => putInRequest(item.userName, item.email, item.itemName)} variant="primary">Swap Request</Button>
+                     {/* Button to Open Modal */}
+                    <button className="btn btn-primary" onClick={() => showModalForSelectedProduct(index)}>
+                      Swap Request
+                    </button>
+
+                    {/* Modal Component */}
+                    {showModal && <ChildModal onClose={() => setShowModal(false)} onSelect={handleSelect} onSwap={()=> putInRequest(data[selectedItem].userName, data[selectedItem].email, data[selectedItem].itemName,data[selectedItem]._id, selectedValue.id, selectedValue.swapItemName)}/>}
+
+
+                    {/* <Button onClick={() => putInRequest(item.userName, item.email, item.itemName, 'hairdryer')} variant="primary">Swap Request</Button> */}
                     <Button  onClick={() => putInWishlist(item.itemName, item.description, item.images , item.category , item.userName, item.email)} variant="contained" color="secondary"><FaHeart className="text-danger" /> </Button>
                   
 

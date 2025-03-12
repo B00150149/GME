@@ -4,7 +4,7 @@ import { getCustomSession } from '../sessionCode.js';
 export async function GET(req, res) {
     // Make a note we are on
     // the api. This goes to the console.
-    console.log("in the getRequest api page")
+    console.log("in the getReceivedRequest api page")
     const session = await getCustomSession()
     const email = session.email;
     
@@ -18,12 +18,17 @@ export async function GET(req, res) {
     console.log('Connected successfully to server');
     const db = client.db(dbName);
     const collection = db.collection('swapRequests'); // collection name
-    //filter rout request for the particular user 
-    const findResult = await collection.find({userEmail:email, status:"Pending"}).toArray();
+    //filter rout request and status of request for the particular user 
+    const findResult = await collection.find({userEmail:email,status:"Accepted"}).toArray();
     console.log('Found documents =>', findResult);
+    
 
+    
     //==========================================================
     // at the end of the process we need to send something back.
-    return Response.json(findResult)
-    }
+
+    //await client.close(); // Close DB connection after use
+    return Response.json(findResult);
+   
+   }
     

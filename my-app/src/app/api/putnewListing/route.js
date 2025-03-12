@@ -54,6 +54,7 @@ export async function GET(req, res) {
         images, // Save images as binary
         userName: fullName,
         email: email,
+        dealStatus:'Open',
         createdAt: new Date(), };
 
       const insertResult = await collection.insertOne(newlisting);
