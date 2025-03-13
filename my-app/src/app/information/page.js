@@ -15,91 +15,77 @@ export default function Information() {
     }
   }, []);
 
+  const articles = [
+    {
+      img: articleimg1,
+      link: 'https://www.bbcearth.com/sustainability',
+      alt: 'Sustainability Article 1',
+    },
+    {
+      img: articleimg2,
+      link: 'https://www.downtoearth.org/articles/2019-10/14826/simple-sustainable-swaps',
+      alt: 'Sustainable Swaps Article',
+    },
+    {
+      img: articleimg3,
+      link: 'https://www.buerklin.com/en/electronic-competence/news/study-sustainability-in-electronics/',
+      alt: 'Sustainability in Electronics Article',
+    },
+  ];
+
+  const sections = [
+    {
+      id: 'left',
+      title: 'Learn',
+      image: learnimg,
+      description: 'Gain insights into sustainable practices and eco-friendly living.',
+      link: 'https://www.investopedia.com/terms/s/sustainability.asp',
+    },
+    {
+      id: 'main',
+      title: 'Recycling Tips',
+      image: tipsimg,
+      description: 'Learn valuable tips for recycling electronic waste responsibly.',
+      link: 'https://www.keygreen.ie/news/post/your-guide-to-electronic-waste-recycling',
+    },
+    {
+      id: 'right',
+      title: 'Recycling Locations',
+      image: recycleimg,
+      description: 'Find the nearest recycling centers for electronic waste disposal.',
+      link: 'https://electronicscrap.eu/',
+    },
+  ];
+
   return (
     <div className="Information">
       <Header />
       <div className="grid-container">
-        {/* Top Section */}
+        {/* Carousel Section */}
         <div className="top">
-          <div
-            id="carouselExampleAutoplaying"
-            className="carousel slide"
-            data-bs-ride="carousel"
-          >
+          <div id="carouselExampleAutoplaying" className="carousel slide" data-bs-ride="carousel">
             <div className="carousel-inner">
-              <div className="carousel-item active">
-                <Link
-                  href="https://www.bbcearth.com/sustainability"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Image src={articleimg1} alt="Article 1" className="d-block w-100" />
-                </Link>
-              </div>
-              <div className="carousel-item">
-                <Link
-                  href="https://www.downtoearth.org/articles/2019-10/14826/simple-sustainable-swaps"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Image src={articleimg2} alt="Article 2" className="d-block w-100" />
-                </Link>
-              </div>
-              <div className="carousel-item">
-                <Link
-                  href="https://www.buerklin.com/en/electronic-competence/news/study-sustainability-in-electronics/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Image src={articleimg3} alt="Article 3" className="d-block w-100" />
-                </Link>
-              </div>
+              {articles.map((article, index) => (
+                <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
+                  <Link href={article.link} target="_blank" rel="noopener noreferrer">
+                    <Image src={article.img} alt={article.alt} className="d-block w-100" />
+                  </Link>
+                </div>
+              ))}
             </div>
-            <button
-              className="carousel-control-prev"
-              type="button"
-              data-bs-target="#carouselExampleAutoplaying"
-              data-bs-slide="prev"
-            >
+            <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
               <span className="carousel-control-prev-icon" aria-hidden="true"></span>
               <span className="visually-hidden">Previous</span>
             </button>
-            <button
-              className="carousel-control-next"
-              type="button"
-              data-bs-target="#carouselExampleAutoplaying"
-              data-bs-slide="next"
-            >
+            <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
               <span className="carousel-control-next-icon" aria-hidden="true"></span>
               <span className="visually-hidden">Next</span>
             </button>
           </div>
         </div>
 
-        {/* Other Sections */}
-        {[
-          {
-            id: "left",
-            title: "Learn",
-            image: learnimg,
-            description: "Brief description about what you can learn...",
-            link: "https://www.investopedia.com/terms/s/sustainability.asp",
-          },
-          {
-            id: "main",
-            title: "Recycling Tips",
-            image: tipsimg,
-            description: "Valuable insights and information on sustainable practices...",
-            link: "https://www.keygreen.ie/news/post/your-guide-to-electronic-waste-recycling",
-          },
-          {
-            id: "right",
-            title: "Recycling Locations",
-            image: recycleimg,
-            description: "Discover nearby recycling locations...",
-            link: "https://electronicscrap.eu/",
-          },
-        ].map((section) => (
+        {/* Information Sections */}
+        {sections.map((section) => (
           <div className={section.id} key={section.id}>
             <h4>{section.title}</h4>
             <div className="image-container">
@@ -116,9 +102,6 @@ export default function Information() {
     </div>
   );
 }
-
-
-
 
 
 

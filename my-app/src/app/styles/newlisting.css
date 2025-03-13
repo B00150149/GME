@@ -12,7 +12,7 @@
     text-align: center;
     font-size: 24px;
     font-weight: bold;
-    color: #007bff;
+    color: #10aa02;
     margin-bottom: 20px;
   }
   
@@ -40,8 +40,8 @@
   .form-group input:focus,
   .form-group select:focus,
   .form-group textarea:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+    border-color: #009f1b;
+    box-shadow: 0 0 8px rgba(0, 95, 5, 0.575);
   }
   
   .form-group textarea {
@@ -51,7 +51,7 @@
   .btn-submit {
     width: 100%;
     padding: 12px;
-    background-color: #007bff;
+    background-color: #1d8802;
     border: none;
     border-radius: 4px;
     font-size: 16px;
@@ -60,7 +60,7 @@
   }
   
   .btn-submit:hover {
-    background-color: #0056b3;
+    background-color: #31b800;
     cursor: pointer;
   }
   
