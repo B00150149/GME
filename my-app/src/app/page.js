@@ -35,7 +35,7 @@ export default function Homepage() {
           <Link href="/signup">
             <button className="button">Join the Community</button>
           </Link>
-          <Link href="/information">
+          <Link href="/products">
             <button className="button">Explore Eco-Friendly Upgrades</button>
           </Link>
         </div>
