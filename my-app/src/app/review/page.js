@@ -1,108 +1,150 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import '../styles/Review.css';
+import React, { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { FaStar } from 'react-icons/fa';
+import '../styles/Review.css'; // Import the CSS from styles folder
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function ReviewPage() {
-  const [reviews, setReviews] = useState([]);
-  const [newReview, setNewReview] = useState('');
+  const [reviewText, setReviewText] = useState('');
   const [rating, setRating] = useState(0);
-  const [hover, setHover] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
-  useEffect(() => {
-    // Fetch existing reviews
-    fetch('/api/reviews')
-      .then(response => response.json())
-      .then(data => setReviews(data))
-      .catch(error => console.error('Error fetching reviews:', error));
-    
-    // Check if user is logged in
-    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    setIsLoggedIn(loggedIn);
-  }, []);
+  const [images, setImages] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleReviewSubmit = async (e) => {
-    e.preventDefault();
-    if (!newReview.trim() || rating === 0) return;
+  // Handle file input and preview image
+  const handleImageChange = (event) => {
+    const files = event.target.files;
+    setImages(files);
 
-    const reviewData = { text: newReview, rating, date: new Date().toISOString() };
+    // Preview first image if selected
+    if (files && files[0]) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        setPreview(e.target.result);
+      };
+      reader.readAsDataURL(files[0]);
+    }
+  };
 
-    const response = await fetch('/api/reviews', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(reviewData),
-    });
+  // Handle form submission
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setErrorMessage(''); // Reset error message before submission
 
-    if (response.ok) {
-      setReviews([...reviews, reviewData]);
-      setNewReview('');
+    const formData = new FormData();
+    formData.append('reviewText', reviewText);
+    formData.append('rating', rating);
+    // Append all images to the FormData object
+    for (let i = 0; i < images.length; i++) {
+      formData.append('images', images[i]);
+    }
+
+    try {
+      const response = await fetch('/api/review', {
+        method: 'POST',
+        body: formData,
+      });
+
+      // Check if the response status is OK
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
+        setErrorMessage('Failed to submit review. Please try again later.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Try to parse the response JSON
+      const data = await response.json();
+      console.log('Review submitted successfully:', data);
+
+      // Reset form state after successful submission
+      setReviewText('');
       setRating(0);
+      setImages([]);
+      setPreview(null);
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      setErrorMessage('An error occurred while submitting the review.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div className="review-page">
       <Header />
-      <div className="review-container">
-        <h2>Customer Reviews</h2>
-        
-        {isLoggedIn ? (
-          <form onSubmit={handleReviewSubmit} className="review-form">
-            <div className="rating-container">
-              {[...Array(5)].map((star, index) => {
-                const currentRating = index + 1;
-                return (
-                  <label key={index}>
-                    <input
-                      type="radio"
-                      name="rating"
-                      value={currentRating}
-                      onClick={() => setRating(currentRating)}
-                    />
-                    <FaStar
-                      className="star"
-                      color={currentRating <= (hover || rating) ? "#ffc107" : "#e4e5e9"}
-                      onMouseEnter={() => setHover(currentRating)}
-                      onMouseLeave={() => setHover(null)}
-                    />
-                  </label>
-                );
-              })}
-            </div>
-            <textarea
-              value={newReview}
-              onChange={(e) => setNewReview(e.target.value)}
-              placeholder="Write your review..."
-              className="review-textarea"
-            />
-            <button type="submit" className="review-submit">Submit</button>
-          </form>
-        ) : (
-          <p>Please log in to leave a review.</p>
-        )}
 
-        <div className="review-list">
-          {reviews.length > 0 ? (
-            reviews.map((review, index) => (
-              <div key={index} className="review-item">
-                <div className="review-rating">
-                  {[...Array(5)].map((star, i) => (
-                    <FaStar key={i} color={i < review.rating ? "#ffc107" : "#e4e5e9"} />
-                  ))}
-                </div>
-                <p>{review.text}</p>
-                <span className="review-date">{new Date(review.date).toLocaleDateString()}</span>
+      <div className="review-form container my-5">
+        <div className="card p-4">
+          <h2 className="text-center">Submit a Review</h2>
+
+          <form onSubmit={handleSubmit} encType="multipart/form-data">
+            <div className="form-group">
+              <label htmlFor="reviewText" className="form-label">Review Text:</label>
+              <textarea
+                className="form-control"
+                id="reviewText"
+                name="reviewText"
+                value={reviewText}
+                onChange={(e) => setReviewText(e.target.value)}
+                rows="3"
+              ></textarea>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Rating:</label>
+              <div>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span
+                    key={star}
+                    onClick={() => setRating(star)}
+                    style={{
+                      cursor: 'pointer',
+                      color: star <= rating ? 'gold' : 'gray',
+                    }}
+                  >
+                    ★
+                  </span>
+                ))}
               </div>
-            ))
-          ) : (
-            <p>No reviews yet.</p>
-          )}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="images" className="form-label">Images (optional):</label>
+              <input
+                type="file"
+                className="form-control"
+                id="images"
+                name="images"
+                multiple
+                onChange={handleImageChange}
+              />
+              {preview && (
+                <div className="image-preview mt-3">
+                  <img src={preview} alt="Image preview" className="img-fluid" />
+                </div>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              className="btn btn-primary w-100"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Submitting...' : 'Submit Review'}
+            </button>
+          </form>
+
+          {/* Show error message if submission fails */}
+          {errorMessage && <div className="alert alert-danger mt-3">{errorMessage}</div>}
         </div>
       </div>
+
       <Footer />
     </div>
   );
