@@ -117,11 +117,16 @@
   margin-top: 20px;
 }
 
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  gap: 15px; /* Space between reviews */
+}
+
 .review-item {
   background-color: #e8f5e9;
   padding: 15px;
   border-radius: 8px;
-  margin-bottom: 15px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   text-align: left;
 }
@@ -137,13 +142,11 @@
   margin-top: 5px;
 }
 
-/* Responsive Design */
-@media (max-width: 600px) {
-  .review-container {
-      width: 95%;
-  }
-
-  .star {
-      font-size: 24px;
-  }
+/* Review images */
+.review-images img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-right: 10px;
+  margin-top: 10px;
 }

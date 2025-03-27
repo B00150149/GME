@@ -1,66 +1,46 @@
-import { getCustomSession } from "../sessionCode.js";  // Assuming session handling code exists
+import { getCustomSession } from "../sessionCode.js";  
+import { MongoClient } from "mongodb";
 
-export async function GET(req, res) {
-  console.log("in the review api page");
-  
-  const { searchParams } = new URL(req.url);
-  const reviewText = searchParams.get('reviewText');
-  const rating = searchParams.get('rating');
-  const images = searchParams.getAll('images'); // Handle multiple file uploads if needed
+const url = "mongodb+srv://root:test@cluster0.dkegh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const client = new MongoClient(url);
+const dbName = "greenerme";
 
-  // Get session details (user data)
+export async function GET() {
+  console.log("Fetching reviews from MongoDB");
+
+  try {
+    await client.connect();
+    const db = client.db(dbName);
+    const reviewCollection = db.collection("reviews");
+
+    const reviews = await reviewCollection.find().sort({ createdAt: -1 }).toArray();
+    return new Response(JSON.stringify(reviews), { status: 200 });
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    return new Response(JSON.stringify({ error: "Failed to fetch reviews" }), { status: 500 });
+  }
+}
+
+export async function POST(req) {
+  const formData = await req.formData();
+  const reviewText = formData.get("reviewText");
+  const rating = parseInt(formData.get("rating"), 10);
+  const images = formData.getAll("images"); 
+
   let session = await getCustomSession();
   const email = session.email;
   const fullName = session.fullName;
 
-  console.log("Received reviewText:", reviewText);
-  console.log("Received rating:", rating);
-  console.log("Received images:", images);
-
-  // Validate input
   if (!reviewText || !rating) {
-    console.log("Invalid input detected");
     return new Response(JSON.stringify({ error: "Review text and rating are required" }), { status: 400 });
   }
 
-  // Connect to MongoDB
-  const { MongoClient } = require('mongodb');
-  const url = "mongodb+srv://root:test@cluster0.dkegh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-  const client = new MongoClient(url);
-  const dbName = 'greenerme';
-
   await client.connect();
-  console.log("Connected to MongoDB Atlas");
-
   const db = client.db(dbName);
-  const reviewCollection = db.collection('reviews'); // 'reviews' collection for storing reviews
+  const reviewCollection = db.collection("reviews");
 
-  const newReview = {
-    reviewText,
-    rating,
-    images, // Optionally store image URLs or binary data
-    userName: fullName,
-    email: email,
-    createdAt: new Date(),
-  };
+  const newReview = { reviewText, rating, images, userName: fullName, email, createdAt: new Date() };
+  await reviewCollection.insertOne(newReview);
 
-  const insertResult = await reviewCollection.insertOne(newReview);
-  console.log("Review insert result:", insertResult);
-
-  if (email) {
-    // Optionally add review to the user's profile
-    const userCollection = db.collection('users');
-    const updateResult = await userCollection.updateOne(
-      { email: email },
-      { $push: { reviews: insertResult.insertedId } } // Add the review ID to the user's 'reviews' array
-    );
-
-    console.log("User update result:", updateResult);
-
-    if (updateResult.modifiedCount === 0) {
-      return new Response(JSON.stringify({ error: "User not found or no update made" }), { status: 404 });
-    }
-  }
-
-  return new Response(JSON.stringify({ data: "inserted" }), { status: 200 });
+  return new Response(JSON.stringify(newReview), { status: 200 });
 }
