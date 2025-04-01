@@ -46,13 +46,26 @@ export async function GET(req, res) {
          products: [], 
          wishlist: [], 
          requests: [] ,
+         points: 50,
+         pointsHistory: [],
          createdAt: new Date() };
       const insertResult = await collection.insertOne(user);
   
       console.log("Insert result:", insertResult);
+      
+      
   
       // Return success response
-      return new Response(JSON.stringify({ data: "inserted" }), { status: 200 });
+      return new Response(JSON.stringify({ data: "inserted" }), { status: 200 }
+      );
+      return new Response({
+        "success": true,
+        "message": "User registered successfully",
+        "points": 50
+      }
+
+    
+    );
    
   }
   

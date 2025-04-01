@@ -8,6 +8,8 @@ import Header from '../components/Header';  // Adjust path if needed
 import Footer from '../components/Footer';  // Adjust path if needed
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
+
 export default function Wishlist() {
     const [wishlist, setWishlist] = useState([]);
     const[basePath, setPath] = useState('https://tudublin-my.sharepoint.com/:f:/r/personal/b00156196_mytudublin_ie/Documents/Major%20Project%20Folder/Images/');

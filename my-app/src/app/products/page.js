@@ -10,10 +10,11 @@ import { Button, Card, Row, Col } from 'react-bootstrap';
 import { FaHeart } from 'react-icons/fa'; // Import the heart icon from react-icons
 import '../styles/swap.css';
 import ChildModal from '../productSwap/page.js'; //for the sap selection one swap request is ussed
-
+import Image from 'next/image';
 export default function Products() {
   const [data, setData] = useState([]); // Store the fetched data
   const[basePath, setPath] = useState('https://tudublin-my.sharepoint.com/:f:/r/personal/b00156196_mytudublin_ie/Documents/Major%20Project%20Folder/Images/');
+  //('https://tudublin-my.sharepoint.com/personal/b00156196_mytudublin_ie/Documents/Forms/All.aspx?CID=5413c80e%2Db90a%2D4929%2D9704%2D63372a5cc49d&RootFolder=%2Fpersonal%2Fb00156196%5Fmytudublin%5Fie%2FDocuments%2FMajor%20Project%20Folder%2FImages&FolderCTID=0x012000E696C90687491544B1607D79E8551AD2');
   const [showModal, setShowModal] = useState(false);
   const [selectedValue, setSelectedValue] = useState(null); // Store selected value from modal
   const [selectedItem, setSelectedItem] = useState(""); // Store selected Item
@@ -64,7 +65,7 @@ export default function Products() {
                   
                   <Card.Img
                     variant="top"
-                    style={{ height: '60%' }} // Pass height as a string
+                    style={{ height: '60%', width: '100' }} // Pass height as a string
                     src={basePath+item.images[0]}//{item.images && item.images[0]} // Use the first image if available
                     alt={item.itemName}
                     className="p-3"

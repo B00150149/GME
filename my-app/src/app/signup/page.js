@@ -45,6 +45,10 @@ export default function SignUp() {
 
     if (data.data === 'inserted') {
       console.log('Sign up is successful!');
+
+    // Store awarded points
+      localStorage.setItem('userPoints', data.points);
+
       window.location = '/login';
     } else {
       console.log('Sign up failed');

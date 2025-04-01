@@ -115,24 +115,26 @@ export default function Header() {
           {/* For user icon after login */}
           {isLoggedIn && (
             <div className={`dropdown ${dropdownOpen ? 'open' : ''}`}>
-              <button
-                className="user-link"
-                onClick={() => {
-                  setDropdownOpen(!dropdownOpen);
-                  console.log("Dropdown toggled:", !dropdownOpen); // Debugging
-                }}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'white',
-                  cursor: 'pointer',
-                }}
-              >
-                <FaUser className="user-icon" />
-              </button>
+              <Link
+      href={`/profile2?email=${userData?.email}`} // Pass the user's email as a query parameter
+      className="user-link"
+      onClick={() => {
+        setDropdownOpen(!dropdownOpen);
+        console.log("Dropdown toggled:", !dropdownOpen); // Debugging
+      }}
+      style={{
+        background: 'none',
+        border: 'none',
+        color: 'white',
+        cursor: 'pointer',
+      }}
+    >
+      <FaUser className="user-icon" />
+    </Link>
+              
               {dropdownOpen && (
                 <div className="dropdown-menu">
-                  <Link href="/newlisting" className="dropdown-item">New Listing</Link>
+                  <Link href="/profile2" className="dropdown-item">New Listing</Link>
                   <button onClick={handleLogout} className="dropdown-item">Logout</button>
                 </div>
               )}
