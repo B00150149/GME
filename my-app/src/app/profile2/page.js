@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from "react";
+import { Suspense } from "react"; // Import Suspense
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/swap.css';
