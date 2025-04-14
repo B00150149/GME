@@ -4,8 +4,8 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
-import Header from '../components/Header';  // Adjust path if needed
-import Footer from '../components/Footer';  // Adjust path if needed
+import Header from '../../components/Header';  // Adjust path if needed
+import Footer from '../../components/Footer';  // Adjust path if needed
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
