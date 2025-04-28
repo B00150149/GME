@@ -83,9 +83,11 @@ export default function Header() {
           <Link href="/request" className="request-link">
             <FaEnvelope className="request-icon" />
           </Link>
+
           <Link href="/wishlist" className="wishlist-link">
             <FaHeart className="wishlist-icon" />
           </Link>
+          
           {!isLoggedIn && <Link href="/signup">Signup</Link>}
 
           {/* Messenger icon visible after login */}
