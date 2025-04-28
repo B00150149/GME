@@ -3,11 +3,11 @@
 import React from "react";
 import { useState, useEffect } from 'react';
 
-export default function ChildModal({ onClose, onSelect, onSwap }) {
- // const items = ["Option 1", "Option 2", "Option 3"]; // Sample options
+export default function ChildModal({ category, onClose, onSelect, onSwap }) {
   const [data, setData] = useState([]); // Store the fetched data
+  const [filteredData, setFilteredData] = useState([]); // Store filtered data by category
 
-// Fetch products from the API
+  // Fetch products from the API
   useEffect(() => {
     fetch('/api/getUserProducts')
       .then((res) => res.json())
@@ -16,6 +16,15 @@ export default function ChildModal({ onClose, onSelect, onSwap }) {
       });
   }, []);
 
+  // Filter products by category when data or category changes
+  useEffect(() => {
+    if (category && data.length > 0) {
+      const filtered = data.filter(item => item.category === category);
+      setFilteredData(filtered);
+    } else {
+      setFilteredData([]);
+    }
+  }, [category, data]);
 
   return (
     <div className="modal-backdrop">
@@ -23,9 +32,9 @@ export default function ChildModal({ onClose, onSelect, onSwap }) {
         <h3>Select an Option</h3>
 
         {/* Combobox (select dropdown) */}
-        <select className="form-select" onChange={(e) => onSelect({id: data[e.target.selectedIndex-1]._id, swapItemName: e.target.value})} defaultValue="">
+        <select className="form-select" onChange={(e) => onSelect({id: filteredData[e.target.selectedIndex-1]._id, swapItemName: e.target.value})} defaultValue="">
           <option value="" disabled>Select an option</option>
-          {data.length > 0 && data.map((item, index) => (
+          {filteredData.length > 0 && filteredData.map((item, index) => (
             <option key={index} value={item.itemName}>
               {item.itemName}
             </option>
@@ -38,11 +47,8 @@ export default function ChildModal({ onClose, onSelect, onSwap }) {
         <button className="btn btn-danger" onClick={onClose}>Close</button>
       </div>
 
-      
-
       {/* Modal Styling */}
-    
-        <style jsx>{`
+      <style jsx>{`
         .modal-backdrop {
             position: fixed;
             top: 0;
@@ -62,14 +68,12 @@ export default function ChildModal({ onClose, onSelect, onSwap }) {
             text-align: center;
             // box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Adds a shadow for depth */
         }
-    .form-select {
+        .form-select {
             width: 100%;
             margin-top: 10px;
         }
-        `}</style>
-
+      `}</style>
     </div>
   );
 }
-
 

@@ -88,7 +88,7 @@ export default function Products() {
                     </button>
 
                     {/* Modal Component */}
-                    {showModal && <ChildModal onClose={() => setShowModal(false)} onSelect={handleSelect} onSwap={()=> putInRequest(data[selectedItem].userName, data[selectedItem].email, data[selectedItem].itemName,data[selectedItem]._id, selectedValue.id, selectedValue.swapItemName)}/>}
+{showModal && <ChildModal category={data[selectedItem].category} onClose={() => setShowModal(false)} onSelect={handleSelect} onSwap={()=> putInRequest(data[selectedItem].userName, data[selectedItem].email, data[selectedItem].itemName,data[selectedItem]._id, selectedValue.id, selectedValue.swapItemName)}/>}
 
 
                     {/* <Button onClick={() => putInRequest(item.userName, item.email, item.itemName, 'hairdryer')} variant="primary">Swap Request</Button> */}
