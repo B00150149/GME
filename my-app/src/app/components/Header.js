@@ -153,7 +153,7 @@ export default function Header() {
           <li><Link href="/information">Information</Link></li>
           <li><Link href="/products">Products</Link></li>
           <li><Link href="/about-us">About Us</Link></li>
-          <li><Link href="/newlisting">Upload Product</Link></li>
+          {/* Removed Upload Product link as per request */}
         </ul>
       </nav>
 

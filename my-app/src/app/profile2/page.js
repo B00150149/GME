@@ -39,43 +39,62 @@ const ProfilePage = () => {
   return (
     <>
       <Header />
-      <div className="container my-5">
-        <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-          <h1 className="text-2xl font-bold">Profile</h1>
-          <p className="text-gray-600">Name: {userData.fullName}</p>
-          <p className="text-gray-600">Email: {userData.email}</p>
-          <p className="text-gray-600">Points: {totalPoints}</p>
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <main className="container my-5" style={{ flex: '1 0 auto' }}>
+          <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+            <h1 className="text-2xl font-bold">Profile</h1>
+            <p className="text-gray-600">Name: {userData.fullName}</p>
+            <p className="text-gray-600">Email: {userData.email}</p>
+            <p className="text-gray-600">Points: {totalPoints}</p>
 
-          <PointsTracker setTotalPoints={setTotalPoints} setPointsHistory={setPointsHistory} />
+            <PointsTracker setTotalPoints={setTotalPoints} setPointsHistory={setPointsHistory} />
 
-          <h3 className="text-xl font-semibold mt-4">Points Transaction History:</h3>
-          <ul>
-            {pointsHistory.map((entry, index) => (
-              <li key={index}>{entry}</li>
-            ))}
-          </ul>
+            <h3 className="text-xl font-semibold mt-4">Points Transaction History:</h3>
+            <ul>
+              {pointsHistory.map((entry, index) => (
+                <li key={index}>{entry}</li>
+              ))}
+            </ul>
 
-          <h2 className="text-xl font-semibold mt-4">Uploaded Items</h2>
-          <div className="grid grid-cols-2 gap-4">
-            {userData.products?.map((item, index) => (
-              <div key={item._id || index} className="border p-2 rounded-lg">
-                <img src={item.imageUrl} alt={item.name} className="w-full h-32 object-cover rounded" />
-                <p className="mt-2 font-medium">{item.name}</p>
-              </div>
-            ))}
+            <div className="mb-4">
+              <a
+                href="/newlisting"
+                style={{
+                  display: 'inline-block',
+                  backgroundColor: '#064e03',
+                  color: 'white',
+                  fontWeight: '600',
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  textDecoration: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                Upload Product
+              </a>
+            </div>
+            <h2 className="text-xl font-semibold mt-4">Uploaded Items</h2>
+            <div className="grid grid-cols-2 gap-4">
+              {userData.products?.map((item, index) => (
+                <div key={item._id || index} className="border p-2 rounded-lg">
+                  <img src={item.imageUrl} alt={item.name} className="w-full h-32 object-cover rounded" />
+                  <p className="mt-2 font-medium">{item.name}</p>
+                </div>
+              ))}
+            </div>
+
+            <h2 className="text-xl font-semibold mt-4">Swapped Items</h2>
+            <div className="grid grid-cols-2 gap-4">
+              {userData.swappedItems?.map((item, index) => (
+                <div key={item._id || index} className="border p-2 rounded-lg">
+                  <img src={item.imageUrl} alt={item.name} className="w-full h-32 object-cover rounded" />
+                  <p className="mt-2 font-medium">{item.name}</p>
+                </div>
+              ))}
+            </div>
           </div>
-
-          <h2 className="text-xl font-semibold mt-4">Swapped Items</h2>
-          <div className="grid grid-cols-2 gap-4">
-            {userData.swappedItems?.map((item, index) => (
-              <div key={item._id || index} className="border p-2 rounded-lg">
-                <img src={item.imageUrl} alt={item.name} className="w-full h-32 object-cover rounded" />
-                <p className="mt-2 font-medium">{item.name}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-        <Footer />
+        </main>
+        <Footer style={{ flexShrink: 0 }} />
       </div>
     </>
   );
