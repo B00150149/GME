@@ -2,23 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Card, Row, Col } from 'react-bootstrap';
 import { FaHeart } from 'react-icons/fa';
-import '../styles/swap.css';
 import ChildModal from '../productSwap/page.js';
-import Image from 'next/image';
 
-export default function Products() {
+export default function ProductsClient() {
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get('searchQuery') || '';
+
   const [data, setData] = useState([]);
-  const [basePath, setPath] = useState('https://tudublin-my.sharepoint.com/:f:/r/personal/b00156196_mytudublin_ie/Documents/Major%20Project%20Folder/Images/');
   const [showModal, setShowModal] = useState(false);
   const [selectedValue, setSelectedValue] = useState(null);
-  const [selectedItem, setSelectedItem] = useState("");
-  const searchParams = useSearchParams();
-  const searchQuery = searchParams.get('searchQuery');
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     if (searchQuery && searchQuery.trim() !== '') {
@@ -68,7 +63,6 @@ export default function Products() {
 
   return (
     <div className="products">
-      <Header />
       <div className="container mt-4">
         <h2 className="text-center mb-4">Products</h2>
         <Row xs={1} sm={2} md={3} lg={4} className="g-4">
@@ -96,7 +90,21 @@ export default function Products() {
                   <button className="btn btn-primary" onClick={() => showModalForSelectedProduct(index)}>
                     Swap Request
                   </button>
-                  {showModal && <ChildModal category={data[selectedItem].category} onClose={() => setShowModal(false)} onSelect={handleSelect} onSwap={() => putInRequest(data[selectedItem].userName, data[selectedItem].email, data[selectedItem].itemName, data[selectedItem]._id, selectedValue?.id, selectedValue?.swapItemName)} />}
+                  {showModal && selectedItem !== null && (
+                    <ChildModal
+                      category={data[selectedItem].category}
+                      onClose={() => setShowModal(false)}
+                      onSelect={handleSelect}
+                      onSwap={() => putInRequest(
+                        data[selectedItem].userName,
+                        data[selectedItem].email,
+                        data[selectedItem].itemName,
+                        data[selectedItem]._id,
+                        selectedValue?.id,
+                        selectedValue?.swapItemName
+                      )}
+                    />
+                  )}
                   <Button onClick={() => putInWishlist(item.itemName, item.description, item.images, item.category, item.userName, item.email)} variant="contained" color="secondary"><FaHeart className="text-danger" /></Button>
                 </Card.Footer>
               </Card>
@@ -104,7 +112,6 @@ export default function Products() {
           ))}
         </Row>
       </div>
-      <Footer />
     </div>
   );
 }
