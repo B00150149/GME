@@ -6,7 +6,7 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Header from '../components/Header';  // Adjust path if needed
 import Footer from '../components/Footer';  // Adjust path if needed
-
+import usePointsStore from '../store/usePointsStore'; // Adjust path if needed
 // Add Bootstrap
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -46,14 +46,37 @@ export default function SignUp() {
     if (data.data === 'inserted') {
       console.log('Sign up is successful!');
 
-    // Store awarded points
-      localStorage.setItem('userPoints', data.points);
+    //Award points and update localStorage 
+    try {
+      const earnedPoints = 20; // Earning 20 points for signing up
 
+      //Call the API to update points in the database 
+      await fetch(`/api/users/${data.email}/add-points`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ points: earnedPoints }), // Give 20 points
+      });
+      console.log('Awarded 20 welcome points!');
+
+      // Update Zustand store with the awarded points
+      const { setPoints } = usePointsStore.getState(); // Get Zustand store's `setPoints` function
+      setPoints(earnedPoints); // Set points to 20 for the user
+
+      // Store points in localStorage
+      localStorage.setItem('userPoints', earnedPoints);
+
+      // Redirect user to login page
       window.location = '/login';
-    } else {
-      console.log('Sign up failed');
+    } catch (error) {
+      console.error('Failed to add welcome points:', error);
     }
+  } else {
+    console.log('Sign up failed');
   }
+}
+         
 
   return (
     <>

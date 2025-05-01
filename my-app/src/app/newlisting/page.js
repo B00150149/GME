@@ -4,12 +4,12 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/newlisting.css'; // Import the CSS from styles folder
-import Link from 'next/link';
-import Image from 'next/image';
+import usePointsStore from '../store/usePointsStore'; // Import the usePoints hook
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function newlisting() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { setPoints,addPointsHistory } = usePointsStore()     
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -63,73 +63,86 @@ export default function newlisting() {
     });
 
     const result = await response.json();
-
     if (result.data === 'inserted') {
-      console.log('New Listing is successful!');
+      console.log('New Listing is successful!'); // Award points to user after the listing is successfully inserted
+     
+      try {
+        const earnedPoints = 20; // Award 20 points for new listing
+  
+        // Make API call to update points in the backend
+        const email = localStorage.getItem('userEmail'); // Assuming you store the user's email in localStorage
+        await fetch(`/api/users/${email}/add-points`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ points: earnedPoints }), // Add points
+        });
+  
+        console.log('Awarded 20 points for new listing!');
+  
+        // Update Zustand store with the awarded points
+        const { setPoints } = usePointsStore.getState(); // Get Zustand store's `setPoints` function
+        setPoints((prevPoints) => prevPoints + earnedPoints); // Increment current points by 20
+        addPointsHistory(`+${earnedPoints} points on ${new Date().toLocaleString()}`);
+
+        
+        // Store points in localStorage
+        const currentPoints = parseInt(localStorage.getItem('userPoints') || '0');
+        localStorage.setItem('userPoints', currentPoints + earnedPoints);
+
       window.location = '/products';
-    } else {
+    } 
+    catch(error) {
+        console.error('Error awarding points:', error);
+      }
       console.log('Listing creation failed');
-      setIsSubmitting(false);
     }
-  };
+      setIsSubmitting(false);
+      return;
+    }
 
   return (
-    <div className="newlisting">
+    <div>
       <Header />
-
-      <div className="newlisting container my-5">
-        <div className="card p-4">
-          <h2 className="text-center">New Listing</h2>
-
-          <form onSubmit={handleSubmit} encType="multipart/form-data">
-            <div className="form-group">
-              <label htmlFor="itemName" className="form-label">Item Name:</label>
-              <input type="text" className="form-control" id="itemName" name="itemName" />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="description" className="form-label">Description:</label>
-              <textarea className="form-control" id="description" name="description" rows="3"></textarea>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="category" className="form-label">Category:</label>
-              <select className="form-select" id="category" name="category">
-                <option value="">Select Category</option>
-                <option value="Small">Small</option>
-                <option value="Medium">Medium</option>
-                <option value="Large">Large</option>
+      <div className="container">
+        <h1 className="text-center">Create a New Listing</h1>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
+          <div className="mb-3">
+            <label htmlFor="itemName" className="form-label">Item Name</label>
+            <input type="text" className="form-control" id="itemName" name="itemName" required />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="description" className="form-label">Description</label>
+            <textarea className="form-control" id="description" name="description" rows="3" required></textarea>
+          </div>
+          <div className="mb-3">
+            <label htmlFor="category" className="form-label">Category</label>
+            <select className="form-select" id="category" name="category" required>
+              <option value="">Select a category</option>
+              <option value="electronics">Electronics</option>
+              <option value="furniture">Furniture</option>
+              <option value="clothing">Clothing</option>
+             
               </select>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="images" className="form-label">Images:</label>
-              <input type="file" className="form-control" id="images" name="images" multiple />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="swapDetails" className="form-label">Swap Details:</label>
-              <textarea className="form-control" id="swapDetails" name="swapDetails" rows="3"></textarea>
-            </div>
-
-            <button
-              type="submit"
-              className="btn w-100"
-              style={{
-                backgroundColor: '#064e03',
-                color: 'white',
-                fontWeight: '600',
-                border: 'none',
-              }}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? 'Publishing...' : 'Publish'}
-            </button>
-          </form>
-        </div>
+          </div>
+          <div className="mb-3">
+            <label htmlFor="swapDetails" className="form-label">Swap Details</label>
+            <textarea className="form-control" id="swapDetails" name="swapDetails" rows="3"></textarea>
+          </div>
+          <div className="mb-3">
+            <label htmlFor="images" className="form-label">Upload Images</label>
+            <input type="file" className="form-control" id="images" name="images" accept=".jpg, .jpeg, .png, .gif" multiple required />
+          </div>
+          {isSubmitting ? (
+            <button type="submit" className="btn btn-primary disabled">Submitting...</button>
+          ) : (
+            <button type="submit" className="btn btn-primary">Create Listing</button>
+          )}
+        </form>
       </div>
-
       <Footer />
     </div>
   );
 }
+    
