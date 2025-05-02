@@ -64,6 +64,11 @@ export async function POST(req) {
         if (updateResult.modifiedCount === 0) {
             return new Response(JSON.stringify({ error: "User not found or no update made" }), { status: 404 });
         }
+        const pointsUpdateResult = await collection2.updateOne(
+            { email: email },
+            { $inc: { points: 20 } } // $inc will add 20 to the existing points
+        );
+        console.log("Points update result:", pointsUpdateResult);
     }
 
     //==========================================================

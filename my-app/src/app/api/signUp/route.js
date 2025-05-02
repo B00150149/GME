@@ -30,7 +30,7 @@ export async function GET(req, res) {
       const url = "mongodb+srv://root:test@cluster0.dkegh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     const client = new MongoClient(url);
     const dbName = 'greenerme';
-  
+    try {
       // Connect to MongoDB
       await client.connect();
       console.log("Connected successfully to MongoDB Atlas");
@@ -47,7 +47,7 @@ export async function GET(req, res) {
          wishlist: [], 
          requests: [] ,
          points: 50,
-         pointsHistory: [],
+         pointsHistory: [`+50 points on registration at ${new Date().toLocaleString()}`],
          createdAt: new Date() };
       const insertResult = await collection.insertOne(user);
   
@@ -55,18 +55,19 @@ export async function GET(req, res) {
       
       
   
-      // Return success response
-      return new Response(JSON.stringify({ data: "inserted" }), { status: 200 }
-      );
-      return new Response({
-        "success": true,
-        "message": "User registered successfully",
-        "points": 50
-      }
+      return new Response(JSON.stringify({
+        data: 'inserted',
+        email: email,     // <--- Include the email in response
+        points: 50        // <--- Include starting points
+      }), { status: 200 });
 
-    
-    );
-   
-  }
-  
+
+    } catch (error) {
+      console.error("Signup error:", error);
+      return new Response(JSON.stringify({ data: 'error', error: error.message }), { status: 500 });
+    } finally {
+      await client.close();
+    }
+
+  }  
 
