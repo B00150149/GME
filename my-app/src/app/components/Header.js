@@ -1,4 +1,4 @@
-'use client'
+'use client' 
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link'; // Import Next.js Link component
@@ -8,6 +8,7 @@ import '../styles/Header.css';
 import logo from '../images/logo2.png';  // Adjust the path if necessary
 import { FaHeart, FaSearch, FaEnvelope, FaUser, FaComment, FaBars, FaTimes } from 'react-icons/fa'; // Added FaBars and FaTimes for hamburger menu
 
+
 export default function Header({ onSearch = () => {} }) {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -15,6 +16,26 @@ export default function Header({ onSearch = () => {} }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [menuOpen, setMenuOpen] = useState(false); // State for hamburger menu
+  const [requestCount, setRequestCount] = useState(0);
+
+
+
+  useEffect(() => {
+    const fetchRequestCount = async () => {
+      try {
+        const res = await fetch('/api/getRequest');
+        const data = await res.json();
+        setRequestCount(data.length);  // Count of accepted requests
+      } catch (error) {
+        console.error("Failed to fetch request count:", error);
+      }
+    };
+  
+    if (isLoggedIn) {
+      fetchRequestCount();
+    }
+  }, [isLoggedIn]);
+
 
   useEffect(() => {
     // Fetch the session email
@@ -95,12 +116,20 @@ export default function Header({ onSearch = () => {} }) {
         </button>
 
         <div className={`header__nav ${menuOpen ? 'open' : ''}`}>
-          <Link href="/request" className="request-link" onClick={() => setMenuOpen(false)}>
-            <FaEnvelope className="request-icon" />
-          </Link>
+
+        <Link
+          href="/request" className="request-link"
+          onClick={() => { setRequestCount(0);  setMenuOpen(false);  }} //  clear the badge in memory & close the hamburger menu
+          style={{ position: 'relative' }}>
+          <FaEnvelope className="request-icon" />
+          {requestCount > 0 && ( <span className="notification-badge"> {requestCount} </span> )}
+        </Link>
+
+
           <Link href="/wishlist" className="wishlist-link" onClick={() => setMenuOpen(false)}>
             <FaHeart className="wishlist-icon" />
           </Link>
+          
           {!isLoggedIn && <Link href="/signup" onClick={() => setMenuOpen(false)}>Signup</Link>}
 
           {isLoggedIn && (
