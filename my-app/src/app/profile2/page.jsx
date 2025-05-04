@@ -2,16 +2,19 @@
 
 import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import axios from "axios";
+import { useRouter } from "next/navigation";
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PointsTracker from './PointsTracker';
+import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/swap.css';
 
 const ProfilePage = () => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
+  const [loading, setLoading] = useState(true);
 
   const [userData, setUserData] = useState(null);
   const [totalPoints, setTotalPoints] = useState(0);
@@ -20,7 +23,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await axios.get(`/api/users/${email}`);
+        const res = await fetch(`/api/users/${email}`);
         setUserData(res.data);
         setTotalPoints(res.data.points || 0);
         setPointsHistory(res.data.pointsHistory || []);

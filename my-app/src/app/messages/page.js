@@ -5,6 +5,7 @@ import * as React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import usePointsStore from '../store/usePointsStore';
 
 export default function Messages() {
     const [requestsAccepted, setAcceptedRequests] = useState([]);
@@ -13,14 +14,20 @@ export default function Messages() {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [userData, setUserData] = useState(null);
-    const [points, setPoints] = useState(0);
+    const points = usePointsStore((state) => state.points);
+    const setPoints = usePointsStore((state) => state.setPoints);
 
     useEffect(() => {
-        const storedPoints = localStorage.getItem('userPoints');
-        if (storedPoints) {
-            setPoints(parseInt(storedPoints, 10));
+        const storedPoints = localStorage.getItem('points');
+        if (storedPoints !== null) {
+          setPoints(parseInt(storedPoints, 10));
         }
-    }, []);
+      }, [setPoints]);
+
+      useEffect(() => {
+        localStorage.setItem('points', points.toString());
+      }, [points]);
+    
 
     useEffect(() => {
         const fetchUserData = async () => {

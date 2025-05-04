@@ -1,5 +1,7 @@
 import { MongoClient } from 'mongodb';
 
+
+
 export async function GET(req, { params }) {
   const { email } = await params; // Extract email from the route parameters
 
