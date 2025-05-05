@@ -33,7 +33,7 @@ export default function ChildModal({ category, onClose, onSelect, onSwap }) {
 
         {/* Combobox (select dropdown) */}
         <select className="form-select" onChange={(e) => onSelect({id: filteredData[e.target.selectedIndex-1]._id, swapItemName: e.target.value})} defaultValue="">
-          <option value="" disabled>Select an option</option>
+          <option value="" disabled>Request a swap</option>
           {filteredData.length > 0 && filteredData.map((item, index) => (
             <option key={index} value={item.itemName}>
               {item.itemName}

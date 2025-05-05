@@ -1,3 +1,5 @@
+
+
 import { getCustomSession } from "../sessionCode.js";
 
 export async function POST(req) {
@@ -59,7 +61,9 @@ export async function POST(req) {
         const collection2 = db.collection('users');
         const pointsUpdateResult = await collection2.updateOne(
             { email: email },
-            { $inc: { points: earnedPoints } }
+            { $inc: { points: earnedPoints },
+            $push: { pointsHistory: `+${earnedPoints} points for product upload (category: ${category}) at ${new Date().toLocaleString()}` }
+        }
         );
         console.log("Points update result:", pointsUpdateResult);
     }

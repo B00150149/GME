@@ -116,7 +116,6 @@ export default function Messages() {
             <Header />
             <div className="container mt-4">
                 <h2>Messages</h2>
-                <h4>Your Points: {points}</h4>
                 <div className="row">
                     {/* Sidebar */}
                     <div className="col-md-4 border-end">
