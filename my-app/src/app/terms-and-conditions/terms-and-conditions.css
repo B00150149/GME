@@ -1,0 +1,60 @@
+.terms-container {
+  width: 100vw;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  background-color: #f9f9f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.terms-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.terms-content h2 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #34495e;
+  border-bottom: 2px solid #27ae60;
+  padding-bottom: 0.3rem;
+}
+
+.terms-content p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  padding: 0 1rem;
+}
+
+.terms-content ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.terms-content ul li {
+  margin-bottom: 0.5rem;
+}
+
+.effective-date {
+  font-style: italic;
+  color: #555;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.privacy-link {
+  color: #27ae60;
+  text-decoration: underline;
+}
+
+.privacy-link:hover {
+  color: #2ecc71;
+  text-decoration: none;
+}
