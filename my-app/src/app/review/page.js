@@ -156,13 +156,18 @@ export default function ReviewPage() {
                     ))}
                   </div>
                   <div className="review-date">{new Date(review.createdAt).toLocaleString()}</div>
-                  {review.images?.length > 0 && (
-                    <div className="review-images">
-                      {review.images.map((image, index) => (
-                        <img key={index} src={image} alt={`Review image ${index + 1}`} />
-                      ))}
-                    </div>
-                  )}
+{review.images?.length > 0 && (
+  <div className="review-images">
+    {review.images.map((image, index) => (
+      <img
+        key={index}
+        src={image}
+        alt={`Review image ${index + 1}`}
+        style={{ maxWidth: '100px', maxHeight: '100px', objectFit: 'cover', marginRight: '10px', marginTop: '10px' }}
+      />
+    ))}
+  </div>
+)}
                 </div>
               ))}
             </div>
