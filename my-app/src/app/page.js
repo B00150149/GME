@@ -15,7 +15,12 @@ export default function Homepage() {
       try {
         const response = await fetch('/api/review');
         const data = await response.json();
-        setReviews(data.slice(0, 3)); // Show top 3 reviews
+        if (Array.isArray(data)) {
+          setReviews(data.slice(0, 3)); // Show top 3 reviews
+        } else {
+          console.error('Unexpected data format for reviews:', data);
+          setReviews([]);
+        }
       } catch (error) {
         console.error('Error fetching reviews:', error);
       }
@@ -56,7 +61,7 @@ export default function Homepage() {
         </div>
       </div>
 
-      {/* === Review Section BELOW main content === */}
+      {/* === Review Section BELOW main content === */} 
       <div className="homepage-reviews">
         <h2>What Our Users Are Saying</h2>
         <div className="review-cards">

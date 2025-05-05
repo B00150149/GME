@@ -8,8 +8,8 @@ import usePointsStore from '../store/usePointsStore'; // Import the usePoints ho
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function newlisting() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { setPoints,addPointsHistory } = usePointsStore()     
+  const [isSubmitting, setIsSubmitting] = useState(false); 
+   
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -61,41 +61,41 @@ export default function newlisting() {
       },
       body: JSON.stringify(payload),
     });
-
+    
     const result = await response.json();
     if (result.data === 'inserted') {
-      console.log('New Listing is successful!'); // Award points to user after the listing is successfully inserted
-     
+      console.log('New Listing is successful!'); 
+      alert(`New listing published! 🎉 You earned ${result.points} points.`);
       try {
-        const earnedPoints = 20; // Award 20 points for new listing
-  
-        // Make API call to update points in the backend
-        const email = localStorage.getItem('userEmail'); // Assuming you store the user's email in localStorage
+        const categoryPointsMap = {
+          Small: 20,
+          Medium: 50,
+          Large: 100,
+        };
+        const earnedPoints = categoryPointsMap[category] || 20;
+        const email = localStorage.getItem('userEmail');
+
         await fetch(`/api/users/${email}/add-points`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ points: earnedPoints }), // Add points
+          body: JSON.stringify({ points: earnedPoints }),
         });
-  
-        console.log('Awarded 20 points for new listing!');
-  
-        // Update Zustand store with the awarded points
-        const { setPoints } = usePointsStore.getState(); // Get Zustand store's `setPoints` function
-        setPoints((prevPoints) => prevPoints + earnedPoints); // Increment current points by 20
+        
+        const { setPoints, addPointsHistory } = usePointsStore.getState();
+        setPoints((prev) => prev + earnedPoints);
         addPointsHistory(`+${earnedPoints} points on ${new Date().toLocaleString()}`);
 
-        
-        // Store points in localStorage
         const currentPoints = parseInt(localStorage.getItem('userPoints') || '0');
         localStorage.setItem('userPoints', currentPoints + earnedPoints);
 
-      window.location = '/products';
-    } 
-    catch(error) {
+        alert(`New listing published! 🎉 You earned ${earnedPoints} points.`);
+        window.location = '/products';
+      } catch (error) {
         console.error('Error awarding points:', error);
       }
+    } else {
       console.log('Listing creation failed');
     }
       setIsSubmitting(false);
@@ -120,9 +120,9 @@ export default function newlisting() {
             <label htmlFor="category" className="form-label">Category</label>
             <select className="form-select" id="category" name="category" required>
               <option value="">Select a category</option>
-              <option value="electronics">Electronics</option>
-              <option value="furniture">Furniture</option>
-              <option value="clothing">Clothing</option>
+              <option value="Small">Small</option>
+              <option value="Medium">Medium</option>
+              <option value="Large">Large</option>
              
               </select>
           </div>
@@ -145,4 +145,5 @@ export default function newlisting() {
     </div>
   );
 }
+
     

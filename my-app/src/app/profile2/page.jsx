@@ -21,16 +21,17 @@ const ProfilePage = () => {
   const [pointsHistory, setPointsHistory] = useState([]);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const res = await fetch(`/api/users/${email}`);
-        setUserData(res.data);
-        setTotalPoints(res.data.points || 0);
-        setPointsHistory(res.data.pointsHistory || []);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
+      const fetchUserData = async () => {
+        try {
+          const res = await fetch(`/api/users/${email}`);
+          const data = await res.json();
+          setUserData(data);
+          setTotalPoints(data.points || 0);
+          setPointsHistory(data.pointsHistory || []);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      };
 
     if (email) {
       fetchUserData();

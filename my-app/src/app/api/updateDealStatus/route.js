@@ -2,69 +2,65 @@ import { getCustomSession } from "../sessionCode.js";
 import { MongoClient, ObjectId } from 'mongodb';
 
 
+function isValidObjectId(id) {
+  return typeof id === 'string' && /^[a-fA-F0-9]{24}$/.test(id);
+}
+
 export async function GET(req, res) {
-    // Make a note we are on 
-    // the api. This goes to the console.  
-   console.log("in updateDealStatus api page")
- 
-    // get the values 
-    // that were sent across to us. 
-   const { searchParams } = new URL(req.url);
-   const requestId = searchParams.get('requestId');
-   const itemId = searchParams.get('itemId');
-   const swapItemId = searchParams.get('swapItemId');
-  
+  console.log("in updateDealStatus api page");
 
-   //get the user sending equest details through sessions
-   let session = await getCustomSession();
-   const senderEmail = session.email;
-   const senderName = session.fullName;
+  const { searchParams } = new URL(req.url);
+  const requestId = searchParams.get('requestId');
+  const itemId = searchParams.get('itemId');
+  const swapItemId = searchParams.get('swapItemId');
 
-   console.log('Received parameters:', { requestId });
+  if (!isValidObjectId(requestId)) {
+    return new Response(JSON.stringify({ error: 'Invalid or missing requestId' }), { status: 400 });
+  }
 
+  let session = await getCustomSession();
+  const senderEmail = session.email;
+  const senderName = session.fullName;
 
+  console.log('Received parameters:', { requestId, itemId, swapItemId });
 
-  // =================================================
-   const { MongoClient } = require('mongodb');
-      const url = "mongodb+srv://root:test@cluster0.dkegh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-   const client = new MongoClient(url);
-   const dbName = 'greenerme';
- 
-   
-       await client.connect();
-       console.log('Connected successfully to server');
-       const db = client.db(dbName);
-       const collection = db.collection('swapRequests');
- 
-       const updateResult = await collection.updateOne(
-        { _id:new ObjectId(requestId) }, // Find  by requestId
-        { $set: { dealStatus: 'Sold' } } // Update deal status to Sold
-      );
+  const { MongoClient } = require('mongodb');
+  const url = "mongodb+srv://root:test@cluster0.dkegh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+  const client = new MongoClient(url);
+  const dbName = 'greenerme';
 
-      console.log('Update Result:', updateResult);      
+  await client.connect();
+  console.log('Connected successfully to server');
+  const db = client.db(dbName);
+  const collection = db.collection('swapRequests');
 
-      //Update deal status for items being swapped in newlisting
-      const collection2 = db.collection('newlisting');
-      if(itemId.length>0){
-         const updateResult1 = await collection2.updateOne(
-            { _id:new ObjectId(itemId) }, // Find  by requestId
-            { $set: { dealStatus: 'Sold' } } // Update deal status to Sold
-          );
-  
-        console.log('Update Result1:', updateResult1);   
-      }
-      if(swapItemId.length>0){
-        const updateResult2 = await collection2.updateOne(
-            { _id:new ObjectId(swapItemId) }, // Find  by requestId
-            { $set: { dealStatus: 'Sold' } } // Update deal status to Sold
-          );
-  
-        console.log('Update Result2:', updateResult2);   
-      }
-         
+  const updateResult = await collection.updateOne(
+    { _id: new ObjectId(requestId) },
+    { $set: { dealStatus: 'Sold' } }
+  );
 
-     return new Response(JSON.stringify({ data: "updated" }), { status: 200 });
- }
+  console.log('Update Result:', updateResult);
+
+  const collection2 = db.collection('newlisting');
+
+  if (isValidObjectId(itemId)) {
+    const updateResult1 = await collection2.updateOne(
+      { _id: new ObjectId(itemId) },
+      { $set: { dealStatus: 'Sold' } }
+    );
+    console.log('Update Result1:', updateResult1);
+  }
+
+  if (isValidObjectId(swapItemId)) {
+    const updateResult2 = await collection2.updateOne(
+      { _id: new ObjectId(swapItemId) },
+      { $set: { dealStatus: 'Sold' } }
+    );
+    console.log('Update Result2:', updateResult2);
+  }
+
+  return new Response(JSON.stringify({ data: "updated" }), { status: 200 });
+}
 
 
 

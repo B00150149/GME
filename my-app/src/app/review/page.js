@@ -25,6 +25,7 @@ export default function ReviewPage() {
       try {
         const response = await fetch('/api/review');
         const data = await response.json();
+        console.log('Fetched reviews:', data);
         setReviews(data || []); // Ensure correct response handling
       } catch (error) {
         console.error('Error fetching reviews:', error);
@@ -48,17 +49,42 @@ export default function ReviewPage() {
     setIsSubmitting(true);
     setErrorMessage('');
 
-    const formData = new FormData();
-    formData.append('reviewText', reviewText);
-    formData.append('rating', rating);
-    for (let i = 0; i < images.length; i++) {
-      formData.append('images', images[i]);
-    }
-
     try {
+      // Upload images to Cloudinary
+      const uploadedImageUrls = [];
+      for (let i = 0; i < images.length; i++) {
+        const formData = new FormData();
+        formData.append('file', images[i]);
+        formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET);
+
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`, {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!res.ok) {
+          setErrorMessage('Failed to upload images. Please try again.');
+          setIsSubmitting(false);
+          return;
+        }
+
+        const json = await res.json();
+        uploadedImageUrls.push(json.secure_url);
+      }
+
+      // Prepare review data with image URLs
+      const reviewData = {
+        reviewText,
+        rating,
+        images: uploadedImageUrls,
+      };
+
       const response = await fetch('/api/review', {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(reviewData),
       });
 
       if (!response.ok) {

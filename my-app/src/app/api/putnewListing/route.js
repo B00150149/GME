@@ -51,28 +51,20 @@ export async function POST(req) {
     const insertResult = await collection.insertOne(newlisting);
     console.log("Insert result:", insertResult);
 
+    const normalizedCategory = category.toLowerCase();
+    const earnedPoints = normalizedCategory === 'small' ? 20 : normalizedCategory === 'medium' ? 50 : normalizedCategory === 'large' ? 100 : 0;
+
     if (email) { //or use isLoggedin
+        
         const collection2 = db.collection('users');
-        // Add the new item to the `items` list for the user
-        const updateResult = await collection2.updateOne(
-            { email: email }, // Find user by email
-            { $push: { products: insertResult.insertedId } } // Add new item to `wishlist` array
-        );
-
-        console.log("Update result:", updateResult);
-
-        if (updateResult.modifiedCount === 0) {
-            return new Response(JSON.stringify({ error: "User not found or no update made" }), { status: 404 });
-        }
         const pointsUpdateResult = await collection2.updateOne(
             { email: email },
-            { $inc: { points: 20 } } // $inc will add 20 to the existing points
+            { $inc: { points: earnedPoints } }
         );
         console.log("Points update result:", pointsUpdateResult);
     }
 
-    //==========================================================
+    // ✅ earnedPoints is now safely used here
+    return new Response(JSON.stringify({ data: "inserted", points: earnedPoints }), { status: 200 });
 
-    // Return success response
-    return new Response(JSON.stringify({ data: "inserted" }), { status: 200 });
-}
+    }

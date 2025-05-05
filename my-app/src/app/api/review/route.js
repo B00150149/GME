@@ -14,25 +14,40 @@ export async function GET() {
     const reviewCollection = db.collection("reviews");
 
     const reviews = await reviewCollection.find().sort({ createdAt: -1 }).toArray();
-    return new Response(JSON.stringify(reviews), { status: 200 });
+    return new Response(JSON.stringify(reviews), { 
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
   } catch (error) {
     console.error("Error fetching reviews:", error);
-    return new Response(JSON.stringify({ error: "Failed to fetch reviews" }), { status: 500 });
+    return new Response(JSON.stringify({ error: "Failed to fetch reviews" }), { 
+      status: 500,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
   }
 }
 
 export async function POST(req) {
-  const formData = await req.formData();
-  const reviewText = formData.get("reviewText");
-  const rating = parseInt(formData.get("rating"), 10);
-  const images = formData.getAll("images"); 
+  const body = await req.json();
+  const reviewText = body.reviewText;
+  const rating = parseInt(body.rating, 10);
+  const images = body.images || [];
 
   let session = await getCustomSession();
   const email = session.email;
   const fullName = session.fullName;
 
   if (!reviewText || !rating) {
-    return new Response(JSON.stringify({ error: "Review text and rating are required" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "Review text and rating are required" }), { 
+      status: 400,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
   }
 
   await client.connect();
@@ -42,5 +57,10 @@ export async function POST(req) {
   const newReview = { reviewText, rating, images, userName: fullName, email, createdAt: new Date() };
   await reviewCollection.insertOne(newReview);
 
-  return new Response(JSON.stringify(newReview), { status: 200 });
+  return new Response(JSON.stringify(newReview), { 
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
 }

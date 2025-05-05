@@ -61,6 +61,9 @@ export async function GET(req, res) {
     }
 
     // at the end of the process we need to send something back.
-    return Response.json({ "status":valid})
+    return new Response(JSON.stringify({ status: valid }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+    });
     }
     
