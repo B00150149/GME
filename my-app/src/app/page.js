@@ -70,7 +70,7 @@ export default function Homepage() {
             </div>
           ))}
         </div>
-        <Link href="/review" className="see-more">
+        <Link href="/review/all" className="see-more">
           See More Reviews →
         </Link>
       </div>

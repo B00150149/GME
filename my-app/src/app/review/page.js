@@ -6,7 +6,12 @@ import Footer from '../components/Footer';
 import '../styles/Review.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { useSearchParams } from 'next/navigation';
+
 export default function ReviewPage() {
+  const searchParams = useSearchParams();
+  const showForm = searchParams.get('showForm') !== 'false';
+
   const [reviewText, setReviewText] = useState('');
   const [rating, setRating] = useState(0);
   const [images, setImages] = useState([]);
@@ -81,28 +86,32 @@ export default function ReviewPage() {
     <div className="review-page">
       <Header />
       <div className="review-container">
-        <h2>Submit a Review!</h2>
-        <form onSubmit={handleSubmit} encType="multipart/form-data" className="review-form">
-          <textarea
-            className="review-textarea"
-            value={reviewText}
-            onChange={(e) => setReviewText(e.target.value)}
-            placeholder="Write your review here..."
-          ></textarea>
-          <div className="rating-container">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <span key={star} onClick={() => setRating(star)} className="star" style={{ color: star <= rating ? 'gold' : 'gray' }}>
-                ★
-              </span>
-            ))}
-          </div>
-          <div className="image-upload-container">
-            <label htmlFor="images" className="image-upload-label">Choose images (optional)</label>
-            <input type="file" id="images" name="images" multiple onChange={handleImageChange} style={{ display: 'none' }} />
-            {preview && <div className="image-preview"><img src={preview} alt="Preview" /></div>}
-          </div>
-          <button type="submit" className="review-submit" disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit Review'}</button>
-        </form>
+        {showForm && (
+          <>
+            <h2>Submit a Review!</h2>
+            <form onSubmit={handleSubmit} encType="multipart/form-data" className="review-form">
+              <textarea
+                className="review-textarea"
+                value={reviewText}
+                onChange={(e) => setReviewText(e.target.value)}
+                placeholder="Write your review here..."
+              ></textarea>
+              <div className="rating-container">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span key={star} onClick={() => setRating(star)} className="star" style={{ color: star <= rating ? 'gold' : 'gray' }}>
+                    ★
+                  </span>
+                ))}
+              </div>
+              <div className="image-upload-container">
+                <label htmlFor="images" className="image-upload-label">Choose images (optional)</label>
+                <input type="file" id="images" name="images" multiple onChange={handleImageChange} style={{ display: 'none' }} />
+                {preview && <div className="image-preview"><img src={preview} alt="Preview" /></div>}
+              </div>
+              <button type="submit" className="review-submit" disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit Review'}</button>
+            </form>
+          </>
+        )}
         {errorMessage && <div className="alert alert-danger mt-3">{errorMessage}</div>}
         <div className="review-list">
           {reviews.length === 0 ? (

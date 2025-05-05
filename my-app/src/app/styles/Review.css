@@ -94,6 +94,14 @@
   margin-top: 10px;
 }
 
+.image-preview img {
+  width: 100%;
+  max-width: 300px;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
 /* Submit Button */
 .review-submit {
   background-color: #4caf50;

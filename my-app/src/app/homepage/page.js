@@ -29,6 +29,9 @@ export default function Homepage() {
           <Link href="/eco-upgrades">
             <a className="button">Explore Eco-Friendly Upgrades</a>
           </Link>
+          <Link href="/review/all">
+            <a className="button">See More Reviews</a>
+          </Link>
         </div>
       </div>
     </div>
