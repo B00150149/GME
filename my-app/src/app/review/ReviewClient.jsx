@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { useSearchParams } from 'next/navigation';
 
-export default function ReviewPage() {
+export default function ReviewClient() {
   const searchParams = useSearchParams();
   const showForm = searchParams.get('showForm') !== 'false';
 
@@ -156,18 +156,18 @@ export default function ReviewPage() {
                     ))}
                   </div>
                   <div className="review-date">{new Date(review.createdAt).toLocaleString()}</div>
-{review.images?.length > 0 && (
-  <div className="review-images">
-    {review.images.map((image, index) => (
-      <img
-        key={index}
-        src={image}
-        alt={`Review image ${index + 1}`}
-        style={{ maxWidth: '100px', maxHeight: '100px', objectFit: 'cover', marginRight: '10px', marginTop: '10px' }}
-      />
-    ))}
-  </div>
-)}
+                  {review.images?.length > 0 && (
+                    <div className="review-images">
+                      {review.images.map((image, index) => (
+                        <img
+                          key={index}
+                          src={image}
+                          alt={`Review image ${index + 1}`}
+                          style={{ maxWidth: '100px', maxHeight: '100px', objectFit: 'cover', marginRight: '10px', marginTop: '10px' }}
+                        />
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
