@@ -24,8 +24,26 @@ export async function GET(req, res) {
 
     let valid = false;
     if (user) {
-        // Compare provided password with hashed password
-        const match = await bcrypt.compare(pass, user.pass);
+        // Try bcrypt compare first
+        let match = false;
+        try {
+            match = await bcrypt.compare(pass, user.pass);
+        } catch (err) {
+            console.error("bcrypt compare error:", err);
+        }
+
+        if (!match) {
+            // Fallback: check if stored password is plain text and matches provided password
+            if (user.pass === pass) {
+                // Re-hash password and update DB
+                const saltRounds = 10;
+                const hashedPassword = await bcrypt.hash(pass, saltRounds);
+                await collection.updateOne({ email: email }, { $set: { pass: hashedPassword } });
+                match = true;
+                console.log("Password upgraded to hashed version for user:", email);
+            }
+        }
+
         if (match) {
             let session = await getCustomSession();
             session.email = email;
