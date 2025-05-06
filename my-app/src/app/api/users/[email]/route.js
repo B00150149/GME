@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 
 
 
@@ -20,6 +20,7 @@ export async function GET(req, { params }) {
     const db = client.db(dbName);
     const usersCollection = db.collection('users'); // Collection name
     const productsCollection = db.collection('products'); // Products collection
+    const swapRequestsCollection = db.collection('swapRequests'); // Swap requests collection
 
     // Find the user by their email
     const user = await usersCollection.findOne({ email });
@@ -31,8 +32,49 @@ export async function GET(req, { params }) {
     // Find products uploaded by the user
     const products = await productsCollection.find({ uploaderEmail: email }).toArray();
 
-    // Add products to user object
+    // Find swap requests where user is involved and dealStatus is 'Sold'
+    let swappedItems = await swapRequestsCollection.find({
+      $and: [
+        { dealStatus: 'Sold' },
+        { $or: [{ senderEmail: email }, { receiverEmail: email }] }
+      ]
+    }).toArray();
+
+    // Enrich swappedItems with item names from newlisting collection
+    const newlistingCollection = db.collection('newlisting');
+
+    swappedItems = await Promise.all(swappedItems.map(async (swap) => {
+      let itemName = 'Unknown Item';
+      let swapItemName = 'Unknown Item';
+
+      try {
+        const itemDoc = await newlistingCollection.findOne({ _id: new ObjectId(swap.itemId) });
+        if (itemDoc && itemDoc.itemName) {
+          itemName = itemDoc.itemName;
+        }
+      } catch (e) {
+        console.error('Error fetching itemDoc:', e);
+      }
+
+      try {
+        const swapItemDoc = await newlistingCollection.findOne({ _id: new ObjectId(swap.swapItemId) });
+        if (swapItemDoc && swapItemDoc.itemName) {
+          swapItemName = swapItemDoc.itemName;
+        }
+      } catch (e) {
+        console.error('Error fetching swapItemDoc:', e);
+      }
+
+      return {
+        ...swap,
+        itemName,
+        swapItemName,
+      };
+    }));
+
+    // Add products and swappedItems to user object
     user.products = products;
+    user.swappedItems = swappedItems;
 
     return new Response(JSON.stringify(user), { status: 200 });
   } catch (error) {

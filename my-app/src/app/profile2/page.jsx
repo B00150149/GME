@@ -106,14 +106,35 @@ const ProfilePage = () => {
             )}
 
             <h2 className="text-xl font-semibold mt-4">Swapped Items</h2>
-            <div className="grid grid-cols-2 gap-4">
-              {userData.swappedItems?.map((item, index) => (
-                <div key={item._id || index} className="border p-2 rounded-lg">
-                  <img src={item.imageUrl} alt={item.name} className="w-full h-32 object-cover rounded" />
-                  <p className="mt-2 font-medium">{item.name}</p>
-                </div>
-              ))}
-            </div>
+                {userData.swappedItems && userData.swappedItems.length > 0 ? (
+                  <ul>
+                    {userData.swappedItems.map((item, index) => (
+                      <li key={item._id || index} className="border p-2 rounded-lg flex justify-between items-center">
+                        <span>{item.itemName} swapped with {item.swapItemName}</span>
+                        <a
+                        href="/review"
+                        className="review-button px-3 py-1"
+                        style={{
+                        backgroundColor: '#16a34a',
+                        color: 'white',
+                        borderRadius: '0.375rem',
+                        padding: '0.25rem 0.75rem',
+                        marginLeft: '2rem',
+                        textDecoration: 'none',
+                        cursor: 'pointer',
+                        transition: 'background-color 0.3s ease'
+                        }}
+                      onMouseEnter={e => e.currentTarget.style.backgroundColor = '#15803d'}
+                      onMouseLeave={e => e.currentTarget.style.backgroundColor = '#16a34a'}
+                    >
+                      Review
+                    </a>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No swapped items yet.</p>
+                )}
           </div>
         </main>
         <Footer style={{ flexShrink: 0 }} />
