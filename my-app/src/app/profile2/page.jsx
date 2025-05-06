@@ -9,6 +9,7 @@ import PointsTracker from './PointsTracker';
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/swap.css';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const ProfilePage = () => {
   const router = useRouter();
@@ -19,6 +20,7 @@ const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
   const [totalPoints, setTotalPoints] = useState(0);
   const [pointsHistory, setPointsHistory] = useState([]);
+  const [uploadedProducts, setUploadedProducts] = useState([]);
 
   useEffect(() => {
       const fetchUserData = async () => {
@@ -33,12 +35,25 @@ const ProfilePage = () => {
         }
       };
 
+      const fetchUploadedProducts = async () => {
+        try {
+          console.log("Fetching uploaded products for email:", email);
+          const res = await fetch(`/api/products/user/${email}`);
+          const data = await res.json();
+          console.log("Uploaded products data:", data);
+          setUploadedProducts(data);
+        } catch (error) {
+          console.error("Error fetching uploaded products:", error);
+        }
+      };
+
     if (email) {
       fetchUserData();
+      fetchUploadedProducts();
     }
   }, [email]);
 
-  if (!userData) return <div>Loading...</div>;
+  if (!userData) return <LoadingSpinner />;
 
   return (
     <>
@@ -78,14 +93,17 @@ const ProfilePage = () => {
               </a>
             </div>
             <h2 className="text-xl font-semibold mt-4">Uploaded Items</h2>
-            <div className="grid grid-cols-2 gap-4">
-              {userData.products?.map((item, index) => (
-                <div key={item._id || index} className="border p-2 rounded-lg">
-                  <img src={item.imageUrl} alt={item.name} className="w-full h-32 object-cover rounded" />
-                  <p className="mt-2 font-medium">{item.name}</p>
-                </div>
-              ))}
-            </div>
+            {uploadedProducts && uploadedProducts.length > 0 ? (
+              <ul>
+                {uploadedProducts.map((item, index) => (
+                  <li key={item._id || index} className="border p-2 rounded-lg">
+                    {item.itemName}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No uploaded items yet.</p>
+            )}
 
             <h2 className="text-xl font-semibold mt-4">Swapped Items</h2>
             <div className="grid grid-cols-2 gap-4">
@@ -107,7 +125,7 @@ const ProfilePage = () => {
 // This wraps ProfilePage in a Suspense boundary
 const ProfileWrapper = () => {
   return (
-    <Suspense fallback={<div>Loading profile...</div>}>
+    <Suspense fallback={<LoadingSpinner />}>
       <ProfilePage />
     </Suspense>
   );

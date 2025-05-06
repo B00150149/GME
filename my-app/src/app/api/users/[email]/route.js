@@ -18,14 +18,21 @@ export async function GET(req, { params }) {
     console.log('Connected successfully to MongoDB Atlas');
 
     const db = client.db(dbName);
-    const collection = db.collection('users'); // Collection name
+    const usersCollection = db.collection('users'); // Collection name
+    const productsCollection = db.collection('products'); // Products collection
 
     // Find the user by their email
-    const user = await collection.findOne({ email });
+    const user = await usersCollection.findOne({ email });
 
     if (!user) {
       return new Response(JSON.stringify({ error: 'User not found' }), { status: 404 });
     }
+
+    // Find products uploaded by the user
+    const products = await productsCollection.find({ uploaderEmail: email }).toArray();
+
+    // Add products to user object
+    user.products = products;
 
     return new Response(JSON.stringify(user), { status: 200 });
   } catch (error) {
