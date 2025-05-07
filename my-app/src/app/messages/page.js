@@ -5,7 +5,6 @@ import * as React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import usePointsStore from '../store/usePointsStore';
 
 export default function Messages() {
     const [requestsAccepted, setAcceptedRequests] = useState([]);
@@ -14,20 +13,19 @@ export default function Messages() {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [userData, setUserData] = useState(null);
-    const points = usePointsStore((state) => state.points);
-    const setPoints = usePointsStore((state) => state.setPoints);
+    const [points, setPoints] = useState(0);
+    const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
+
+    // New state for toggles
+    const [isReceivedOpen, setIsReceivedOpen] = useState(true);
+    const [isAcceptedOpen, setIsAcceptedOpen] = useState(true);
 
     useEffect(() => {
-        const storedPoints = localStorage.getItem('points');
-        if (storedPoints !== null) {
-          setPoints(parseInt(storedPoints, 10));
+        const storedPoints = localStorage.getItem('userPoints');
+        if (storedPoints) {
+            setPoints(parseInt(storedPoints, 10));
         }
-      }, [setPoints]);
-
-      useEffect(() => {
-        localStorage.setItem('points', points.toString());
-      }, [points]);
-    
+    }, []);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -88,6 +86,9 @@ export default function Messages() {
 
     function onSelectUser(request) {
         setCurrentChat(request);
+        if (window.innerWidth < 768) {
+            setIsMobileChatOpen(true);
+        }
     }
 
     function updateDeal() {
@@ -95,7 +96,7 @@ export default function Messages() {
             .then((res) => res.json())
             .then((data) => {
                 console.log('Deal updated successfully:', data);
-                // Update  to show deal closed on UI
+                // Update local state to reflect deal closed
                 setCurrentChat((prev) => ({ ...prev, dealStatus: 'Sold' }));
                 setAcceptedRequests((prev) =>
                     prev.map((req) =>
@@ -118,45 +119,70 @@ export default function Messages() {
                 <h2>Messages</h2>
                 <div className="row">
                     {/* Sidebar */}
-                    <div className="col-md-4 border-end">
-                        <h5 className="mb-3">Received Swaps</h5>
-                        <div className="list-group">
-                            {requestsReceived.map((request) => (
-                                <button
-                                    key={request._id}
-                                    className={`list-group-item list-group-item-action ${currentChat && currentChat._id === request._id ? 'active' : ''}`}
-                                    onClick={() => onSelectUser(request)}
-                                >
-                                    <div><strong>{request.senderName}</strong></div>
-                                    <div>{request.swapItemName}</div>
-                                    {request.dealStatus === 'Sold' && <div><strong>Sold</strong></div>}
-                                </button>
-                            ))}
+                    <div className={`col-md-4 border-end ${isMobileChatOpen ? 'd-none d-md-block' : ''}`} style={{ display: isMobileChatOpen ? 'none' : 'block' }}>
+                        {/* Toggle buttons side by side */}
+                        <div className="d-flex mb-3">
+                            <button
+                                className={`btn me-2 ${isReceivedOpen ? 'btn-primary' : 'btn-outline-primary'}`}
+                                onClick={() => {
+                                    setIsReceivedOpen(true);
+                                    setIsAcceptedOpen(false);
+                                }}
+                            >
+                                Received Swaps
+                            </button>
+                            <button
+                                className={`btn ${isAcceptedOpen ? 'btn-primary' : 'btn-outline-primary'}`}
+                                onClick={() => {
+                                    setIsAcceptedOpen(true);
+                                    setIsReceivedOpen(false);
+                                }}
+                            >
+                                Accepted Swaps
+                            </button>
                         </div>
+                        {isReceivedOpen && (
+                            <div className="list-group">
+                                {requestsReceived.map((request) => (
+                                    <button
+                                        key={request._id}
+                                        className={`list-group-item list-group-item-action ${currentChat && currentChat._id === request._id ? 'active' : ''}`}
+                                        onClick={() => onSelectUser(request)}
+                                    >
+                                        <div><strong>{request.senderName}</strong></div>
+                                        <div>{request.swapItemName}</div>
+                                        {request.dealStatus === 'Sold' && <div><strong>Sold</strong></div>}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
 
                         <br /><br /><br />
 
-                        <h5 className="mb-3">Accepted Swaps</h5>
-                        <div className="list-group">
-                            {requestsAccepted.map((request) => (
-                                <button
-                                    key={request._id}
-                                    className={`list-group-item list-group-item-action ${currentChat && currentChat._id === request._id && request.dealStatus === 'Open' ? 'active' : ''}`}
-                                    onClick={() => onSelectUser(request)}
-                                >
-                                    <div><strong>{request.userName}</strong></div>
-                                    <div>{request.itemName}</div>
-                                    {request.dealStatus === 'Sold' && <div><strong>Sold</strong></div>}
-                                </button>
-                            ))}
-                        </div>
+                        {/* Removed old toggle header and list for Accepted Swaps, replaced with conditional rendering below */}
+                        {isAcceptedOpen && (
+                            <div className="list-group">
+                                {requestsAccepted.map((request) => (
+                                    <button
+                                        key={request._id}
+                                        className={`list-group-item list-group-item-action ${currentChat && currentChat._id === request._id && request.dealStatus === 'Open' ? 'active' : ''}`}
+                                        onClick={() => onSelectUser(request)}
+                                    >
+                                        <div><strong>{request.userName}</strong></div>
+                                        <div>{request.itemName}</div>
+                                        {request.dealStatus === 'Sold' && <div><strong>Sold</strong></div>}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     {/* Chat Window */}
-                    <div className="col-md-8">
+                    <div className={`col-md-8 ${isMobileChatOpen ? '' : 'd-none d-md-block'}`} style={{ display: isMobileChatOpen ? 'block' : 'none' }}>
                         {currentChat ? (
                             <div className="card">
                                 <div className="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                    <button className="btn btn-light me-2 d-md-none" onClick={() => setIsMobileChatOpen(false)}>Back</button>
                                     <h6 className="mb-0">{currentChat.senderName} :</h6>
                                     <button className="btn btn-light ms-auto" onClick={() => updateDeal(currentChat._id)}>Close Deal</button>
                                 </div>
@@ -205,3 +231,213 @@ export default function Messages() {
         </>
     );
 }
+
+
+
+// 'use client';
+
+// import { useState, useEffect } from 'react';
+// import * as React from 'react';
+// import Header from '../components/Header';
+// import Footer from '../components/Footer';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import usePointsStore from '../store/usePointsStore';
+
+// export default function Messages() {
+//     const [requestsAccepted, setAcceptedRequests] = useState([]);
+//     const [requestsReceived, setReceivedRequests] = useState([]);
+//     const [currentChat, setCurrentChat] = useState(null);
+//     const [messages, setMessages] = useState([]);
+//     const [newMessage, setNewMessage] = useState('');
+//     const [userData, setUserData] = useState(null);
+//     const points = usePointsStore((state) => state.points);
+//     const setPoints = usePointsStore((state) => state.setPoints);
+
+//     useEffect(() => {
+//         const storedPoints = localStorage.getItem('points');
+//         if (storedPoints !== null) {
+//           setPoints(parseInt(storedPoints, 10));
+//         }
+//       }, [setPoints]);
+
+//       useEffect(() => {
+//         localStorage.setItem('points', points.toString());
+//       }, [points]);
+    
+
+//     useEffect(() => {
+//         const fetchUserData = async () => {
+//             try {
+//                 const response = await fetch('/api/getData');
+//                 const data = await response.json();
+//                 if (data.email && data.fullName) {
+//                     setUserData(data);
+//                     console.log('User data fetched successfully');
+//                 }
+//             } catch (error) {
+//                 console.error('Error fetching user data:', error);
+//             }
+//         };
+//         fetchUserData();
+//     }, []);
+
+//     useEffect(() => {
+//         fetch('/api/getAcceptedRequest')
+//             .then((res) => res.json())
+//             .then((data) => {
+//                 setAcceptedRequests(data);
+//                 if (data.length > 0) setCurrentChat(data[0]); // Set default chat
+//             })
+//             .catch((error) => console.error('Error fetching accepted requests:', error));
+//     }, []);
+
+//     useEffect(() => {
+//         fetch('/api/getReceivedRequest')
+//             .then((res) => res.json())
+//             .then((data) => {
+//                 setReceivedRequests(data);
+//                 if (data.length > 0) setCurrentChat(data[0]); // Set default chat
+//             })
+//             .catch((error) => console.error('Error fetching received requests:', error));
+//     }, []);
+
+//     useEffect(() => {
+//         if (currentChat) {
+//             fetch(`/api/getMessages?requestId=${currentChat._id}`)
+//                 .then((res) => res.json())
+//                 .then((data) => {
+//                     if (data.length > 0) setMessages(data[0].messages);
+//                     else setMessages([]);
+//                 })
+//                 .catch((error) => console.error('Error fetching messages:', error));
+//         }
+//     }, [currentChat]);
+
+//     function putInMessages(requestId, message) {
+//         fetch(`/api/putInMessages?messages=${encodeURIComponent(message)}&requestId=${encodeURIComponent(requestId)}`)
+//             .then(() => {
+//                 setMessages([...messages, { senderName: userData.fullName, email: userData.email, message, Timestamp: new Date() }]);
+//                 setNewMessage('');
+//             })
+//             .catch((error) => console.error('Error sending message:', error));
+//     }
+
+//     function onSelectUser(request) {
+//         setCurrentChat(request);
+//     }
+
+//     function updateDeal() {
+//         fetch(`/api/updateDealStatus?requestId=${currentChat._id}&itemId=${currentChat.itemId}&swapItemId=${currentChat.swapItemId}`)
+//             .then((res) => res.json())
+//             .then((data) => {
+//                 console.log('Deal updated successfully:', data);
+//                 // Update  to show deal closed on UI
+//                 setCurrentChat((prev) => ({ ...prev, dealStatus: 'Sold' }));
+//                 setAcceptedRequests((prev) =>
+//                     prev.map((req) =>
+//                         req._id === currentChat._id ? { ...req, dealStatus: 'Sold' } : req
+//                     )
+//                 );
+//                 setReceivedRequests((prev) =>
+//                     prev.map((req) =>
+//                         req._id === currentChat._id ? { ...req, dealStatus: 'Sold' } : req
+//                     )
+//                 );
+//             })
+//             .catch((error) => console.error('Error updating deal:', error));
+//     }
+
+//     return (
+//         <>
+//             <Header />
+//             <div className="container mt-4">
+//                 <h2>Messages</h2>
+//                 <div className="row">
+//                     {/* Sidebar */}
+//                     <div className="col-md-4 border-end">
+//                         <h5 className="mb-3">Received Swaps</h5>
+//                         <div className="list-group">
+//                             {requestsReceived.map((request) => (
+//                                 <button
+//                                     key={request._id}
+//                                     className={`list-group-item list-group-item-action ${currentChat && currentChat._id === request._id ? 'active' : ''}`}
+//                                     onClick={() => onSelectUser(request)}
+//                                 >
+//                                     <div><strong>{request.senderName}</strong></div>
+//                                     <div>{request.swapItemName}</div>
+//                                     {request.dealStatus === 'Sold' && <div><strong>Sold</strong></div>}
+//                                 </button>
+//                             ))}
+//                         </div>
+
+//                         <br /><br /><br />
+
+//                         <h5 className="mb-3">Accepted Swaps</h5>
+//                         <div className="list-group">
+//                             {requestsAccepted.map((request) => (
+//                                 <button
+//                                     key={request._id}
+//                                     className={`list-group-item list-group-item-action ${currentChat && currentChat._id === request._id && request.dealStatus === 'Open' ? 'active' : ''}`}
+//                                     onClick={() => onSelectUser(request)}
+//                                 >
+//                                     <div><strong>{request.userName}</strong></div>
+//                                     <div>{request.itemName}</div>
+//                                     {request.dealStatus === 'Sold' && <div><strong>Sold</strong></div>}
+//                                 </button>
+//                             ))}
+//                         </div>
+//                     </div>
+
+//                     {/* Chat Window */}
+//                     <div className="col-md-8">
+//                         {currentChat ? (
+//                             <div className="card">
+//                                 <div className="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+//                                     <h6 className="mb-0">{currentChat.senderName} :</h6>
+//                                     <button className="btn btn-light ms-auto" onClick={() => updateDeal(currentChat._id)}>Close Deal</button>
+//                                 </div>
+
+//                                 <div className="chat-box border p-3" style={{ height: '400px', overflowY: 'scroll' }}>
+//                                     {messages.map((msg, index) => (
+//                                         <div key={index} className={`mb-2 ${msg.senderName === 'You' ? 'text-end' : ''}`}>
+//                                             <strong>{msg.senderName}:</strong> {msg.message}
+//                                             <br /><small className="text-muted">{new Date(msg.Timestamp).toLocaleString()}</small>
+//                                         </div>
+//                                     ))}
+//                                     {currentChat.dealStatus === 'Sold' && (
+//                                         <div className="alert alert-info mt-3" role="alert">
+//                                             User has closed deal
+//                                         </div>
+//                                     )}
+//                                 </div>
+
+//                                 <div className="card-footer">
+//                                     <div className="input-group">
+//                                         <input
+//                                             type="text"
+//                                             className="form-control"
+//                                             value={newMessage}
+//                                             onChange={(e) => setNewMessage(e.target.value)}
+//                                             placeholder="Type a message..."
+//                                             disabled={currentChat.dealStatus === 'Sold'}
+//                                         />
+//                                         <button
+//                                             className="btn btn-primary"
+//                                             onClick={() => putInMessages(currentChat._id, newMessage)}
+//                                             disabled={currentChat.dealStatus === 'Sold' || newMessage.trim() === ''}
+//                                         >
+//                                             Send
+//                                         </button>
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                         ) : (
+//                             <p>Select a chat to start messaging.</p>
+//                         )}
+//                     </div>
+//                 </div>
+//             </div>
+//             <Footer />
+//         </>
+//     );
+// }
