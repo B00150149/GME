@@ -9,7 +9,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function newlisting() {
   const [isSubmitting, setIsSubmitting] = useState(false); 
-   
+  const [selectedImages, setSelectedImages] = useState([]);
+
+  const handleImageChange = (event) => {
+    const files = Array.from(event.target.files);
+    const filePreviews = files.map(file => URL.createObjectURL(file));
+    setSelectedImages(filePreviews);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -108,14 +114,17 @@ export default function newlisting() {
       <div className="container">
         <h1 className="text-center">Create a New Listing</h1>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
+         
           <div className="mb-3">
             <label htmlFor="itemName" className="form-label">Item Name</label>
             <input type="text" className="form-control" id="itemName" name="itemName" required />
           </div>
+
           <div className="mb-3">
             <label htmlFor="description" className="form-label">Description</label>
             <textarea className="form-control" id="description" name="description" rows="3" required></textarea>
           </div>
+
           <div className="mb-3">
             <label htmlFor="category" className="form-label">Category</label>
             <select className="form-select" id="category" name="category" required>
@@ -123,17 +132,32 @@ export default function newlisting() {
               <option value="Small">Small</option>
               <option value="Medium">Medium</option>
               <option value="Large">Large</option>
-             
-              </select>
+            </select>
           </div>
+
           <div className="mb-3">
             <label htmlFor="swapDetails" className="form-label">Swap Details</label>
             <textarea className="form-control" id="swapDetails" name="swapDetails" rows="3"></textarea>
           </div>
+
           <div className="mb-3">
-            <label htmlFor="images" className="form-label">Upload Images</label>
-            <input type="file" className="form-control" id="images" name="images" accept=".jpg, .jpeg, .png, .gif" multiple required />
+          <label htmlFor="images" className="form-label">Images:</label>
+              <input
+                type="file"
+                className="form-control"
+                id="images"
+                name="images"
+                accept="image/*"
+                multiple
+                onChange={handleImageChange}/>
           </div>
+
+          <div className="image-previews" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '15px' }}>
+              {selectedImages.map((src, index) => (
+                <img key={index} src={src} alt={`Preview ${index}`} style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5px' }} />
+              ))}
+            </div>
+            
           {isSubmitting ? (
             <button type="submit" className="btn btn-primary disabled">Submitting...</button>
           ) : (
