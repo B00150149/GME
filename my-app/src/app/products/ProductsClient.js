@@ -43,11 +43,19 @@ export default function ProductsClient() {
   }, [searchQuery]);
 
   function putInWishlist(itemName, description, images, category, userName, email) {
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+      window.location.href = '/login';
+      return;
+    }
     fetch(`/api/putInWishlist?itemName=${encodeURIComponent(itemName)}&description=${encodeURIComponent(description)}&images=${encodeURIComponent(images)}&category=${encodeURIComponent(category)}&userName=${encodeURIComponent(userName)}&userEmail=${encodeURIComponent(email)}`);
     alert("Added to Wishlist");
   }
 
   function putInRequest(userName, email, itemName, itemId, swapItemId, swapItemName) {
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+      window.location.href = '/login';
+      return;
+    }
     setShowModal(false);
     fetch(`/api/putInRequest?userName=${encodeURIComponent(userName)}&userEmail=${encodeURIComponent(email)}&itemName=${encodeURIComponent(itemName)}&ItemId=${encodeURIComponent(itemId)}&swapItemId=${encodeURIComponent(swapItemId)}&swapItemName=${encodeURIComponent(swapItemName)}`);
     alert("Swap Request sent to: " + userName);
