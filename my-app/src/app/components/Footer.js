@@ -16,7 +16,7 @@ export default function Footer() {
 
       {/* Footer Links */}
       <div className="footer-links">
-        <Link href="/privacy-policy">Privacy Policy</Link>
+        <Link href="/privacypolicy">Privacy Policy</Link>
         <Link href="/terms-and-conditions">Terms and Conditions</Link>
         <Link href="/contact-us">Contact Us</Link>
       </div>
